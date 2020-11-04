@@ -1,0 +1,148 @@
+function validar_clave() {
+    var x = document.FGEC.clv_usu.value; // Se asigna la contraseña a la variable "x"
+    var msj = ""; // Mensaje de alerta por si cumple o no los requisitos
+    // Arreglos que contienen mayúsculas, minúsculas, números y cáracteres especiales.
+    var may = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+    var min = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ","o","p","q","r","s","t","u","v","w","x","y","z"];
+    var num = ["0","1","2","3","4","5","6","7","8","9"];
+    var esp =  [".",",","-","/","*","+"]; // Caracteres especiales
+    var cmay = 0; // Contador de mayúsculas
+    var cmin = 0; // Contador de minúsculas
+    var cnum = 0; // Contador de números
+    var cesp = 0; // Contador de caracteres especiales
+    var chars = 0; // Contador de los caracteres mayúsculas y minúsculas
+    var ces = 0; // Contador de espacios
+    var ctotal = 0; // Contador total
+    // Se utilizará la propiedad "length" en los ciclos for para conocer cuántos caracteres tiene la contraseña o la variable "x"
+
+    // Se realizará un ciclo for para conocer cuántas mayúsculas hay en la variable "x"
+    for (var i = 0; i < 27; i++) {
+        for (var j = 0; j < (x.length); j++) { 
+            if (x[j] === may[i]) {
+                cmay++;
+                }
+            }
+        }
+
+     // Se realizará un ciclo for para conocer cuántas minúsculas hay en la variable "x"
+    for (var i = 0; i < 27; i++) {
+        for (var j = 0; j < (x.length); j++) {
+            if (x[j] === min[i]) {
+                cmin++;
+                }
+            }
+        }
+
+    chars = cmay  + cmin; // Se conoce el número de caracteres sean mayúsculas o minúsculas
+
+    // Se realizará un ciclo for para conocer cuántos caracteres especiales hay en la variable "x"
+    for (var i = 0; i < 6; i++) {
+        for (var j = 0; j < (x.length); j++) {
+            if (x[j] === esp[i]) {
+                cesp++;
+                }
+            }
+        }
+
+    // Se realizará un ciclo for para conocer cuántos números hay en la variable "x"
+    for (var i = 0; i < 10; i++) {
+        for (var j = 0; j < (x.length); j++) {
+            if (x[j] === num[i]) {
+                cnum++;
+                }
+            }
+        }
+
+    // Hallar espacios en la variable "x"
+    for (var i = 0; i < x.length; i++) {
+        if (x[i] === " ") {
+            ces++;
+            }
+        }
+
+    // Validar si la contraseña es correcta
+    if (((chars >= 4 && chars <= 10) && (cmay > 1 && cmin > 1)) && ((cnum >= 3 && cnum <= 5) && (cesp >= 1 && cesp <= 3)) && (ces == 0)) {
+        return true; // Retorn verdadero para procesar el registro
+    } else {  // Mensajes de cumplimiento: 
+        msj += "Obligatorio cumplir con:\n"
+        if (cmay < 2) {msj += "Mayúsculas\n";}
+        if (cmin < 2) {msj += "Minúsculas\n";}
+        if (cnum < 3) {msj += "Números\n";}
+        if (cesp == 0) {msj +="Caracteres especiales\n";}
+        if (ces == 1) {msj +="¡Contiene un espacio!\n";}
+        if (ces > 1) {msj +="¡Contiene "+ces+" espacios!";}
+        alert(msj);
+        return false;
+        }
+    }
+
+// Eventos del formulario
+// La función procesar recibe como parámetro el valor del input submit. Su propósito es que ningún campo se encuentre vacío.
+function procesar(valor) {
+    var id = document.FGEC.email_emp.value;
+    var ci = document.FGEC.ci_emp.value;
+    var pn = document.FGEC.p_nomb.value;
+    var pa = document.FGEC.p_apel.value;
+    var clave = document.FGEC.clv_usu.value;
+    var fing = document.FGEC.fcha_ing.value;
+    var pri = document.FGEC.pri_usu.value;
+
+    if (valor == "Registrar") {
+        // Verificar si los campos se encuentran vacíos
+        if (id == "" || ci == "" || pn == "" || pa == "" || clave == "" || fing == "" || pri == "") {
+            alert("¡Hay campos vacíos y/o incorrectos!\n");
+            }
+
+        if (clave.length < 8 && clave != "") { // Mostrar mensaje sobe el campo de contraseña
+            validar_clave();
+            }
+        }
+    }
+
+// Determina enviar el formulario, cuando la contraseña sea válida
+function forms_submit() {
+
+    if (validar_clave()==false) { // Aviso de negación de envío del formulario
+        alert("El formulario no fue enviado");
+        document.FGEC.clv_usu.select();
+        return false;
+    } else {  // Aviso de envío del formulario
+        alert("El formulario fue enviado");
+        return true;
+        }
+    }
+
+function forms_reset(bool,name,sel) { // Función restablece todos los campos o sombrea uno en concreto
+    var id = document.FGEC.email_emp.value;
+    var ci = document.FGEC.ci_emp.value;
+    var pn = document.FGEC.p_nomb.value;
+    var sn = document.FGEC.s_nomb.value;
+    var pa = document.FGEC.p_apel.value;
+    var sa = document.FGEC.s_apel.value;
+    var clave = document.FGEC.clv_usu.value;
+    var fing = document.FGEC.fcha_ing.value;
+    var pri = document.FGEC.pri_usu.value;
+    
+    if (bool==true && name=="limpiar") {
+        // Si al menos un campo no está vacío se despliega una venta de confirmación
+        if (id !="" || ci !="" || pn !="" || sn !="" || pa !="" || sa !="" || clave !="" || fing !="" || pri !="") {
+
+            //Confirmar si se quiere borrar todos los campos
+            if (confirm("¿Limpiar todos los campos?")) { 
+                document.FGEC.reset();
+                }
+            }
+    } else {
+        // Selecionar un campo en concreto y también se valida si no está vacío.
+        if ((id !="" && name=="email_emp") || (ci !="" && name=="ci_emp") || (pn !="" && name=="p_nomb") || (sn !="" && name=="s_nomb") || 
+           (pa !="" && name=="p_apel") || (sa !="" && name=="s_apel") || (clave !="" && name=="clv_usu")) {
+            select_campo(true,sel);
+            }
+        }
+    }
+
+function select_campo(bool,sel){ // Seleccionar un campo en concreto, espera las indicaciones de la función "forms_reset"
+    if (bool != false) {
+        sel.select();
+        }
+    }

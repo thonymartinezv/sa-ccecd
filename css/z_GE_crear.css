@@ -1,0 +1,39 @@
+h1 {
+	font-size:30px;
+}
+
+body {
+	background:#004565;
+	margin: 0;
+	color:#fff;
+	font-size:16px;
+	font-family:arial;
+}
+
+label {
+	font-weight:bold;
+}
+
+input, select {
+	margin:5px 20px;
+	font-family:courier;
+	border-color:white;
+	padding:5px 10px;
+	margin-bottom:2px;
+}
+
+p {
+	margin:10px;
+}
+
+input[type="submit"], input[type="button"] { 
+	width:150px;
+	height:30px;
+	background:#004565;
+	color:#fff;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover { 
+	background:#001565;
+	font-weight:bold;
+}

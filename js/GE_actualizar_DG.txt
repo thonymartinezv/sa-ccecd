@@ -1,0 +1,68 @@
+// Eventos del formulario
+// La función procesar recibe como parámetro el valor del input submit. Su propósito es que ningún campo se encuentre vacío.
+function procesar(valor) {
+    var id = document.FGEA.email_emp.value;
+    var ci = document.FGEA.ci_emp.value;
+    var pn = document.FGEA.p_nomb.value;
+    var pa = document.FGEA.p_apel.value;
+    var fing = document.FGEA.fcha_ing.value;
+    var pri = document.FGEA.pri_usu.value;
+    var est = document.FGEA.estado_usu.value;
+
+    if (valor == "Actualizar") {
+        // Verificar si los campos se encuentran vacíos
+        if (id == "" || ci == "" || pn == "" || pa == "" || fing == "" || pri == "" || est == "") {
+            alert("¡Hay campos vacíos y/o incorrectos!\n");
+            return false;
+        } else {
+            return true;
+            }
+        }
+    }
+
+// Determina enviar el formulario, cuando la contraseña sea válida
+function forms_submit() {
+
+    if (procesar()==false) { // Aviso de negación de envío del formulario
+        alert("El formulario no fue enviado");
+        return false;
+    } else {  // Aviso de envío del formulario
+        alert("El formulario fue enviado");
+        return true;
+        }
+    }
+
+function forms_reset(bool,name,sel) { // Función restablece todos los campos o sombrea uno en concreto
+    var id = document.FGEA.email_emp.value;
+    var ci = document.FGEA.ci_emp.value;
+    var pn = document.FGEA.p_nomb.value;
+    var sn = document.FGEA.s_nomb.value;
+    var pa = document.FGEA.p_apel.value;
+    var sa = document.FGEA.s_apel.value;
+    var fing = document.FGEA.fcha_ing.value;
+    var pri = document.FGEA.pri_usu.value;
+    
+    if (bool==true && name=="limpiar") {
+        // Si al menos un campo no está vacío se despliega una venta de confirmación
+        if (id !="" || ci !="" || pn !="" || sn !="" || pa !="" || sa !="" || fing !="" || pri !="") {
+
+            //Confirmar si se quiere borrar todos los campos
+            if (confirm("¿Devolver los valores originales a todos los campos?")) { 
+                document.FGEA.reset();
+                select_campo(true,sel);
+                }
+            }
+    } else {
+        // Selecionar un campo en concreto y también se valida si no está vacío.
+        if ((id !="" && name=="email_emp") || (ci !="" && name=="ci_emp") || (pn !="" && name=="p_nomb") || (sn !="" && name=="s_nomb") || 
+           (pa !="" && name=="p_apel") || (sa !="" && name=="s_apel")) {
+            select_campo(true,sel);
+            }
+        }
+    }
+
+function select_campo(bool,sel){ // Seleccionar un campo en concreto, espera las indicaciones de la función "forms_reset"
+    if (bool != false) {
+        sel.select();
+        }
+    }
