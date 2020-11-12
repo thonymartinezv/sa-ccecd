@@ -1,5 +1,5 @@
 <?php
 
-    include("vista/v_indexMadmin.php");
+    include("vista/v_index_admin.php");
 
 ?>
