@@ -1,14 +1,14 @@
 <?php
 session_start();
-if (!isset($_SESSION['email_otic']) || ($_SESSION['pri_otic'] == 0)|| !isset($_POST['email_usu'])) {
-	header("Location: ../vista/v_R.html");
+if (!isset($_SESSION['email_otic']) || ($_SESSION['pri_otic'] == 0)|| !isset($_GET['email_usu'])) {
+	header("Location: vista/v_R.html");
 	die();
 } else {
-	require_once("../modelo/m_Empleado.php"); // Clase Modelo de CRUD Empleado
-	include_once("../config/config_fh.php");
+	require_once("modelo/m_Empleado.php"); // Clase Modelo de CRUD Empleado
+	include_once("config/config_fh.php");
 	$emp = new Empleado();
-	$emp->setEmail($_POST['email_usu']); //contiene el email del empleado a consultar
-	$perfil = $emp->consultar_perfil_emp();
+	$emp->setEmail($_GET['email_usu']); //contiene el email del empleado a consultar
+	$perfil = $emp->find();
 	$email = $perfil[0][0]['email_emp'];
 ?>
 
@@ -17,7 +17,7 @@ if (!isset($_SESSION['email_otic']) || ($_SESSION['pri_otic'] == 0)|| !isset($_P
 <head>
 <title>GE consultar perfil - CCECD</title>
 <meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="../css/z2_GE_consultar.css">
+<link rel="stylesheet" type="text/css" href="css/z2_GE_consultar.css">
 <script type="text/javascript">
 	function reporte(valor) {
 		if (valor == "Importar perfil") {
@@ -30,7 +30,7 @@ if (!isset($_SESSION['email_otic']) || ($_SESSION['pri_otic'] == 0)|| !isset($_P
 </head>
 <body>
 <div align="center">
-<img src="../img/MPPCT_OTIC_CCECD.png" height="10%" width="100%">
+<img src="img/MPPCT_OTIC_CCECD.png" height="10%" width="100%">
 <h1> Administrador consultar perfil de empleado -  CCECD</h1>
 <?php
 //0-> fecha, 1-> hora, 2-> numero dia semana, 3-> nombre dia semana, 4-> dia del año, 5-> numero semana del año, 6-> fecha hoy en formato Y/m/d
@@ -70,7 +70,7 @@ $hoy = zh_vzla();
 </table>
 	<p>
 		<!--Formulario que retorna a seleccionar empleado para su consulta-->
-		<form name='GECP' method='POST' action='../vista/v_GE_consultar.php'>
+		<form name='GECP' method='POST' action='vista/v_GE_consultar.php'>
 		<input type='hidden' name='ele' value='CP'>
 		<input type='submit' name='submit' value='Volver'>
 		<input type="button" form="FRpdf" name="rpdf" value="Importar perfil" onclick="reporte(this.value)">

@@ -11,7 +11,7 @@
 define("SRV", "localhost");
 define("USR", "postgres");
 define("PAS", "0000");
-define("BDN", "MPv2");
+define("BDN", "sa-ccecd");
 define("PORT", "5433");
 
 /* Maneras de declarar las constantes:

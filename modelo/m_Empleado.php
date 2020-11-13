@@ -205,12 +205,59 @@ class Empleado extends ConexionBD
 	/**
 	 * Consultar empleados
 	 */
-	public function consultar_emp()
+	public function all()
 	{
 		try 
 		{
-			$stmt = $this->cbd->prepare("SELECT * FROM usuario");
+			$stmt = $this->cbd->prepare(
+				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu 
+					FROM empleado
+					INNER JOIN usuario
+					ON empleado.email_emp = usuario.email_usu
+			");
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch(PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage();
+			exit();
+		}
+	}
+
+	public function searchByEmail($search)
+	{
+		try 
+		{
+			$stmt = $this->cbd->prepare(
+				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu 
+					FROM empleado
+					INNER JOIN usuario
+					ON empleado.email_emp = usuario.email_usu 
+					where empleado.email_emp = :email
+			");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':email', $search);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch(PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage();
+			exit();
+		}
+	}
+
+	public function searchByCi($ci)
+	{
+		try 
+		{
+			$stmt = $this->cbd->prepare(
+				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu 
+					FROM empleado
+					INNER JOIN usuario
+					ON empleado.email_emp = usuario.email_usu 
+					where empleado.ci_emp = :ci
+			");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':ci', $ci);
 			$stmt->execute();
 			return $stmt->fetchAll();
 		} catch(PDOException $error) {
@@ -223,7 +270,7 @@ class Empleado extends ConexionBD
 	 * Consultar perfil de un empleado
 	 * Para ello, se debe saber cuál es su email o correo electrónico
 	 */
-	public function consultar_perfil_emp()
+	public function find()
 	{
 		try
 		{
@@ -261,7 +308,7 @@ class Empleado extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare("UPDATE empleado SET email_emp = :email_emp, ci_emp = :ci_emp, p_nomb = :p_nomb, 
-				s_nomb = :s_nomb, p_apel = :p_apel, s_apel = :s_apel, fcha_ing = :fcha_ing WHERE email_emp = :email_usu");
+				s_nomb = :s_nomb, p_apel = :p_apel, s_apel = :s_apel WHERE email_emp = :email_usu");
 			
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email_emp', $this->email_emp);
@@ -270,26 +317,27 @@ class Empleado extends ConexionBD
 			$stmt->bindParam(':s_nomb', $this->s_nomb);
 			$stmt->bindParam(':p_apel', $this->p_apel);
 			$stmt->bindParam(':s_apel', $this->s_apel);
-			$stmt->bindParam(':fcha_ing', $this->fcha_ing);
 			$stmt->bindParam(':email_usu', $this->email);
 			$exito = $stmt->execute();
-
 			/**
 			 * Sólo se permite sí es DG. Puede cambiar estado y privilegio de DG anteriores, SAO, DIS
 			 */
-			if ($this->pri_emp == 2) { 
-				$stmt = $this->cbd->prepare("UPDATE usuario SET pri_usu = :pri_usu, estado_usu = :estado_usu WHERE email_usu = :email_usu");
+			if ( $this->pri_emp != null && $this->pri_emp == 2) {
+				$stmt = $this->cbd->prepare("UPDATE usuario SET email_usu = :email_emp ,pri_usu = :pri_usu WHERE email_usu = :email_usu");
 				$stmt->setFetchMode(PDO::FETCH_ASSOC);
 				$stmt->bindParam(':pri_usu', $this->pri);
-				$stmt->bindParam(':estado_usu', $this->est);
 				$stmt->bindParam(':email_usu', $this->email_emp);
+				$stmt->bindParam(':email_emp', $this->email_emp);
 				$stmt->execute();
-				}
-		} catch (PDOException $error) {
-				echo "Error: ejecutando consulta SQL.".$error->getMessage(); // Mostramos un mensame genérico de error.
-				exit();			
 			}
-			return $exito;
+			if ($_SESSION['email_otic'] == $this->email) {
+				$_SESSION['email_otic'] = $this->email_emp;
+			}
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage(); // Mostramos un mensame genérico de error.
+			exit();			
+		}
+		return $exito;
 	}
 
 	/**
@@ -310,13 +358,5 @@ class Empleado extends ConexionBD
 			exit();
 			}
 	}
-
-	/**
-	 * Importar reporte
-	public function importar_perfil_pdf()
-	{
-
-	}
-	 */
 }
 ?>
