@@ -14,10 +14,11 @@
                     $search = explode("@", $search)[0];
                 }
             }
-
             $empleados = $empleado_instancia->searchByEmail($search);
             if (count($empleados) < 1) {
-                $empleados = $empleado_instancia->searchByCi($search);
+                if (intval($search) > 0) {
+                    $empleados = $empleado_instancia->searchByCi($search);
+                }
             }
         }else{
             $empleados = $empleado_instancia->all();
