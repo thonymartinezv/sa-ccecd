@@ -1,0 +1,52 @@
+.cuadro-graficos{
+    height: 550px;
+    border-bottom: 2px solid rgb(189, 189, 189)!important;
+}
+
+.barra-proceso{
+    background-color: #005fb8;
+}
+
+.barra-cancelado{
+    background-color: rgb(255, 71, 71);
+}
+
+.barra-finalizado{
+    background-color: rgb(0, 196, 111);
+}
+
+.barra-total{
+    background-color: gray;
+}
+
+.barra-num{
+    padding-left: 0!important;
+    height: 500px;
+}
+
+.barra-line{
+    border-left: 2px solid rgb(189, 189, 189)!important;
+
+}
+
+.item-medida{
+    height: 50px;
+}
+
+.barra-medir{
+    height: 500px;
+}
+
+.content-medida{
+
+}
+.div-medida{
+    border-top: 1px solid rgb(189, 189, 189)!important;
+}
+
+.text-barra{
+    color: rgb(233, 233, 233);
+}
+.titulo-barra{
+    color: gray;
+}

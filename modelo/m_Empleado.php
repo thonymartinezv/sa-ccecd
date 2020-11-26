@@ -244,6 +244,10 @@ class Empleado extends ConexionBD
 			exit();
 		}
 	}
+	public function findByEmail($email)
+	{
+		return $this->searchByEmail($email)[0];
+	}
 
 	public function searchByCi($ci)
 	{

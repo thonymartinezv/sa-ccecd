@@ -69,15 +69,15 @@
       </nav>
 
       <div class="container-fluid">
-      <ul class="nav nav-tabs mt-2">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">General</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="?c=gestionar_estadisticas_form">Detallado</a>
-        </li>
-      </ul>
-        <?php include("vista/v_graficos.php");?>
+        <ul class="nav nav-tabs mt-2">
+            <li class="nav-item">
+            <a class="nav-link" href="?c=gestionar_estadisticas">General</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active" href="#">Detallado</a>
+            </li>
+        </ul>
+        <?php include("vista/v_formulario.php");?>
       </div>
     <!-- /#page-content-wrapper -->
 
