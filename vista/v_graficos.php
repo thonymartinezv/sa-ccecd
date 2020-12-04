@@ -10,26 +10,36 @@
 
 <div class="px-5 pt-4">
     <form action="?c=gestionar_estadisticas" method="POST" >
-        <div class="form-row">
-            <div class="form-group col-md-4">
+    <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="inputState">Administrador:</label>
+                <input name="administrador" value="<?=isset($_POST["administrador"])?$_POST["administrador"]:""?>"
+                    type="text" class="form-control" />
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputState">Empleado:</label>
+                <input name="empleado" value="<?=isset($_POST["empleado"])?$_POST["empleado"]:""?>" type="text"
+                    class="form-control" />
+            </div>
+            <div class="form-group col-md-3">
                 <label for="inputState">Desde:</label>
                 <div class='input-group date' id='datetimepicker1'>
-                    <input name="fecha-inicio" type="date" class="form-control" />
+                    <input value="<?=isset($_POST["fecha-inicio"])?$_POST["fecha-inicio"]:""?>" name="fecha-inicio" type="date" class="form-control" />
                 </div>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
                 <label for="inputState">Hasta:</label>
                 <div class='input-group date' id='datetimepicker1'>
-                    <input name="fecha-fin" type="date" class="form-control" />
+                    <input value="<?=isset($_POST["fecha-fin"])?$_POST["fecha-fin"]:""?>" name="fecha-fin" type="date" class="form-control" />
                 </div>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
                 <label for="inputState">Prioridad</label>
                 <select name="prioridad" id="inputState" class="form-control">
-                    <option value="-1" selected>Ninguna</option>
-                    <option value="0">Baja</option>
-                    <option value="1">Moderada</option>
-                    <option value="2">Alta</option>
+                    <option value="-1" <?=isset($_POST["prioridad"])?($_POST["prioridad"]=="-1"?"selected":""):"selected"?>>Ninguna</option>
+                    <option value="0" <?=isset($_POST["prioridad"])?($_POST["prioridad"]=="0"?"selected":""):""?>>Baja</option>
+                    <option value="1" <?=isset($_POST["prioridad"])?($_POST["prioridad"]=="1"?"selected":""):""?>>Moderada</option>
+                    <option value="2" <?=isset($_POST["prioridad"])?($_POST["prioridad"]=="2"?"selected":""):""?>>Alta</option>
                 </select>
             </div>
         </div>
