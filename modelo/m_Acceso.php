@@ -234,6 +234,24 @@ class Acceso extends ConexionBD
 		}
 	}
 
+	public function consultar_acc_pdf_by_id($id)
+	{
+		try 
+		{
+			$query = "SELECT a.*,mon.p_nomb mon_nombre,adm.p_nomb adm_nombre FROM acceso a
+					  INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
+					  INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE a.id_acc = :id";
+
+			$stmt = $this->cbd->prepare($query);
+			$stmt->bindParam(":id",$id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			return $stmt->FetchAll()[0];
+		} catch(Exception $e) {
+			print "Error: ". $e->getMessage();
+		}
+	}
+
 	public function consultar_acc_by_all($desde,$hasta,$estado,$prioridad,$administrador,$empleado,$primero,$cantidad)
 	{
 		try 

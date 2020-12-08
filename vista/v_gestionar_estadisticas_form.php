@@ -23,29 +23,10 @@
 
   <div class="d-flex" id="wrapper">
 
-    <!-- Sidebar -->
-    <div class="bg-dark border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">
-            <div class="row">
-                <img src="img/bandera.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
-                <div class="title-navbar">
-                    <p class="lead title-small">Gobierno Bolivariano</p><br>
-                    <p class="lead title-small">de Venezuela</p>
-                </div>
-                <div class="line-vertical"></div>
-                <div class="title-navbar-2">
-                    <p class="lead title-small">Ministerio del Poder Popular</p><br>
-                    <p class="lead title-small">para <strong>Ciencia y Tecnología</strong></p>
-                </div>
-            </div>
-      </div>
-      <div class="list-group list-group-flush">
-        <a href="./" class="list-group-item list-group-item-action bg-dark">Gestionar Empleado</a>
-        <a href="?c=gestionar_acceso" class="list-group-item list-group-item-action bg-dark">Gestionar Acceso</a>
-        <a href="" class="list-group-item list-group-item-action bg-dark activo">Gestionar Estadística</a>
-      </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
+    <?php 
+      $activo="estadistica";
+      include_once("vista/sidebar.php");
+    ?>
 
     <!-- Page Content -->
     <div id="page-content-wrapper">

@@ -12,6 +12,7 @@
         (isset($_POST["empleado"])?$_POST["empleado"]:"")
     );
     $html = '
+    <img src="img/mppct.jpg" width="1560" height="144">
     <div id="main-container">
         <table>
             <thead>

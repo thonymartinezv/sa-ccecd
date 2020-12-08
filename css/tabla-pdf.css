@@ -10,7 +10,7 @@ body{
 }
 
 #main-container{
-	margin: 100px auto;
+	margin: 20px auto;
 	width: 1000px;
 }
 
@@ -30,7 +30,7 @@ th, td{
 }
 
 thead tr{
-	background-color: #246355;
+	background-color: #0f75bd;
 }
 
 thead tr td{

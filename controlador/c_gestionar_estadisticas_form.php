@@ -1,7 +1,7 @@
 <?php 
     require_once('modelo/m_Acceso.php');
     $acceso = new Acceso();
-    $pagina = isset($_GET["pag"])?intval($_GET["pag"]):0;
+    $pagina = isset($_GET["pag"])?intval($_GET["pag"]):1;
     $cantidad = (isset($_GET["num"])?intval($_GET["num"]):4);
     $accesos = $acceso->consultar_acc_by_all(
             (isset($_POST["fecha-inicio"])?$_POST["fecha-inicio"]:""),
