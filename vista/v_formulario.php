@@ -184,20 +184,18 @@
         <script>
             function enviar(pag) {
                 if (pag && pag != "0") {
-                    document.form_estadisticas.action = "?c=gestionar_estadisticas_form&pag=" + pag + "&num=" + 4;
+                    document.form_estadisticas.action = "?c=gestionar_estadisticas_form&pag=" + pag + "&num=" + <?=$cantidad?>
                 } else {
-                    document.form_estadisticas.action = "?c=gestionar_estadisticas_form&num=" + 4;
+                    document.form_estadisticas.action = "?c=gestionar_estadisticas_form&num=" + <?=$cantidad?>
                 }
                 document.form_estadisticas.method = 'POST';
                 document.form_estadisticas.removeAttribute("target");
-                //document.form1.submit();
             }
 
             function pdf() {
                 document.form_estadisticas.action = "?c=pdf_estadisticas";
                 document.form_estadisticas.method = 'POST';
                 document.form_estadisticas.setAttribute("target", "_blank");
-                //document.form1.submit();
             }
 
             function pdf_by(id) {

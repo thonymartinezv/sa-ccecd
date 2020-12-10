@@ -10,7 +10,7 @@
             (isset($_POST["prioridad"])?$_POST["prioridad"]:"-1"),
             (isset($_POST["administrador"])?$_POST["administrador"]:""),
             (isset($_POST["empleado"])?$_POST["empleado"]:""),
-            (($pagina?$pagina-1:0)*$cantidad),
+            (($pagina-1)*$cantidad),
             $cantidad
     );
     $total = $acceso->consultar_acc_by_all_count(

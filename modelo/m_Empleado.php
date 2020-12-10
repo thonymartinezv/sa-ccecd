@@ -168,13 +168,13 @@ class Empleado extends ConexionBD
 	 * Crear empleado
 	 * Crear usuario
 	 */
-	public function crear_emp() 
+	public function crear_emp($debug = false) 
 	{
 		try
 		{
-			$stmt = $this->cbd->prepare("INSERT INTO empleado (email_emp, ci_emp, p_nomb, s_nomb, p_apel, s_apel, fcha_ing)
-				VALUES (:Email_emp, :CI_emp, :P_nomb, :S_nomb, :P_apel, :S_apel, :Fcha_ing)");
-
+			$stmt = $this->cbd->prepare("INSERT INTO empleado (email_emp, ci_emp, p_nomb, s_nomb, p_apel, s_apel, fcha_ing, tipo_sangre,tlf)
+				VALUES (:Email_emp, :CI_emp, :P_nomb, :S_nomb, :P_apel, :S_apel, now()::timestamp(0) , '+A', 12345)");
+			
 			// Asignamos valores a los parámetros con $stmt->bindParam 
 			$stmt->bindParam(':Email_emp', $this->email_emp);
 			$stmt->bindParam(':CI_emp', $this->ci_emp);
@@ -182,17 +182,17 @@ class Empleado extends ConexionBD
 			$stmt->bindParam(':S_nomb', $this->s_nomb);
 			$stmt->bindParam(':P_apel', $this->p_apel);
 			$stmt->bindParam(':S_apel', $this->s_apel);
-			$stmt->bindParam(':Fcha_ing', $this->fcha_ing);
-
+			if ($debug) {
+				return $stmt;
+			}
+			
 			// $exito es verdadero el empleado fue registrado, entonces, ahora se registra su usuario
 			if ($stmt->execute()) {
 				$stmt = $this->cbd->prepare("INSERT INTO usuario (email_usu, clave_usu, pri_usu, estado_usu) 
-				VALUES (:Email_usu, :Clave_usu, :Pri_usu, :Estado_usu)");
-
+				VALUES (:Email_usu, :Clave_usu, :Pri_usu, 1)");
 				$stmt->bindParam(':Email_usu', $this->email_emp); // Se asigna el mismo 'email' para TABLA usuario
 				$stmt->bindParam(':Clave_usu', $this->clv); // Asignación de clave
 				$stmt->bindParam(':Pri_usu', $this->pri); // Asignación de privilegio (es el CARGO de OTIC)
-				$stmt->bindParam(':Estado_usu', $this->est); // Asignación predeterminada usuario 'Activo'
 				$exito = $stmt->execute();
 				return $exito; // Retorna verdadero si se registra el usuario, caso contrario, devuelve falso
 			}
@@ -205,7 +205,7 @@ class Empleado extends ConexionBD
 	/**
 	 * Consultar empleados
 	 */
-	public function all()
+	public function all($cantidad,$primero)
 	{
 		try 
 		{
@@ -214,8 +214,11 @@ class Empleado extends ConexionBD
 					FROM empleado
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu
+					LIMIT :cantidad OFFSET :primero
 			");
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':cantidad', $cantidad);
+			$stmt->bindParam(':primero', $primero);
 			$stmt->execute();
 			return $stmt->fetchAll();
 		} catch(PDOException $error) {
@@ -224,7 +227,26 @@ class Empleado extends ConexionBD
 		}
 	}
 
-	public function searchByEmail($search)
+	public function all_count()
+	{
+		try 
+		{
+			$stmt = $this->cbd->prepare(
+				"	SELECT count(*)
+					FROM empleado
+					INNER JOIN usuario
+					ON empleado.email_emp = usuario.email_usu
+			");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll()[0]['count'];
+		} catch(PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage();
+			exit();
+		}
+	}
+
+	public function searchByEmail($search,$cantidad,$primero)
 	{
 		try 
 		{
@@ -234,9 +256,12 @@ class Empleado extends ConexionBD
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu 
 					where empleado.email_emp = :email
+					LIMIT :cantidad OFFSET :primero
 			");
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email', $search);
+			$stmt->bindParam(':cantidad', $cantidad);
+			$stmt->bindParam(':primero', $primero);
 			$stmt->execute();
 			return $stmt->fetchAll();
 		} catch(PDOException $error) {
@@ -244,12 +269,34 @@ class Empleado extends ConexionBD
 			exit();
 		}
 	}
+
+	public function searchByEmail_count($search)
+	{
+		try 
+		{
+			$stmt = $this->cbd->prepare(
+				"	SELECT count(*)
+					FROM empleado
+					INNER JOIN usuario
+					ON empleado.email_emp = usuario.email_usu
+					where empleado.email_emp = :email
+			");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':email', $search);
+			$stmt->execute();
+			return $stmt->fetchAll()[0]['count'];
+		} catch(PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage();
+			exit();
+		}
+	}
+
 	public function findByEmail($email)
 	{
 		return $this->searchByEmail($email)[0];
 	}
 
-	public function searchByCi($ci)
+	public function searchByCi($ci,$cantidad,$primero)
 	{
 		try 
 		{
@@ -259,11 +306,35 @@ class Empleado extends ConexionBD
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu 
 					where empleado.ci_emp = :ci
+					LIMIT :cantidad OFFSET :primero
+			");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':ci', $ci);
+			$stmt->bindParam(':cantidad', $cantidad);
+			$stmt->bindParam(':primero', $primero);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch(PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage();
+			exit();
+		}
+	}
+
+	public function searchByCi_count($ci)
+	{
+		try 
+		{
+			$stmt = $this->cbd->prepare(
+				"	SELECT count(*)
+					FROM empleado
+					INNER JOIN usuario
+					ON empleado.email_emp = usuario.email_usu 
+					where empleado.ci_emp = :ci
 			");
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':ci', $ci);
 			$stmt->execute();
-			return $stmt->fetchAll();
+			return $stmt->fetchAll()[0]['count'];
 		} catch(PDOException $error) {
 			echo "Error: ejecutando consulta SQL.".$error->getMessage();
 			exit();
