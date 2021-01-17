@@ -92,8 +92,8 @@
                 echo '<div class="container pt-3"></div>';
             }
         ?>
-        <div class="row col-12 d-flex justify-content-center">
-            <div class="card-body card col-3 mt-2">
+        <div class="row col-xl-12 d-flex justify-content-center">
+            <div class="card-body card col-xl-3 col-sm-12 col-lg-4 col-md-3 mt-2">
                 <div class="col-12 d-flex justify-content-center pb-1 mt-2">
                     <img class="thumbnail" src="img/logo2.png" width="70" height="70">
                 </div>

@@ -2,7 +2,7 @@
 <div class="bg-dark border-right" id="sidebar-wrapper">
     <div class="sidebar-heading">
         <div class="row">
-            <img src="img/bandera.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+            <img src="img/bandera.png" width="27" height="32" class="d-inline-block align-top" alt="" loading="lazy">
             <div class="title-navbar">
                 <p class="lead title-small">Gobierno Bolivariano</p><br>
                 <p class="lead title-small">de Venezuela</p>

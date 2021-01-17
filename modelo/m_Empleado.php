@@ -246,7 +246,7 @@ class Empleado extends ConexionBD
 		}
 	}
 
-	public function searchByEmail($search,$cantidad,$primero)
+	public function searchByEmail($search,$cantidad = 1,$primero = 0)
 	{
 		try 
 		{

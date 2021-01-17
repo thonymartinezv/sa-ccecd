@@ -55,7 +55,7 @@ min-width: 100vw;
 margin-left: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 960px) {
 #sidebar-wrapper {
   margin-left: 0;
 }

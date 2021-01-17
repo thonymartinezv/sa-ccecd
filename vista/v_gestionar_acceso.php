@@ -15,7 +15,15 @@
 
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
-
+  <style>
+    .content-accesos{
+      font-size:x-small!important;
+    }
+    .display-4{
+      font-size:xx-large!important;
+      font-weight:inherit;
+    }
+  </style>
 </head>
 
 <body>
@@ -58,24 +66,27 @@
         </div>
       </nav>
 
-    <div class="container-fluid">
-        <div class="px-5 pt-3">
-          <?php if(isset($_GET["ms"])){ ?>
-            <div class="alert alert-success alert-dismissible fade show sticky-top mt-2 col-7 mx-auto" role="alert">
-              <strong>Mensaje:</strong> <?=$_GET["ms"]?>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          <?php } else if(isset($_GET["mf"])){?>
-            <div class="alert alert-danger alert-dismissible fade show sticky-top mt-2 col-7 mx-auto" role="alert">
-              <strong>Mensaje:</strong> <?=$_GET["mf"]?>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          <?php }?>
-          <p class="display-4">Accesos en proceso</p>
+    <div class="content-accesos">
+        <div class="pt-3">
+          <div class="container-fluid px-5">
+            <?php if(isset($_GET["ms"])){ ?>
+              <div class="alert alert-success alert-dismissible fade show sticky-top mt-2 col-7 mx-auto" role="alert">
+                <strong>Mensaje:</strong> <?=$_GET["ms"]?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            <?php } else if(isset($_GET["mf"])){?>
+              <div class="alert alert-danger alert-dismissible fade show sticky-top mt-2 col-7 mx-auto" role="alert">
+                <strong>Mensaje:</strong> <?=$_GET["mf"]?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            <?php }?>
+            <p class="display-4">Accesos en proceso</p>
+          </div>
+          <div class="container-fluid mt-2 overflow-auto">
           <table class="table table-striped mt-4">
             <thead class="thead-dark">
                 <tr>
@@ -173,6 +184,7 @@
               <?php } ?>
             </tbody>
         </table>
+          </div>
         </div>
     </div>
     <!-- /#page-content-wrapper -->

@@ -5,9 +5,9 @@
         $acceso = new Acceso();
         $empleado = new Empleado();
         $administrador = $empleado->findByEmail($_SESSION["email_otic"]);
-        if(count($empleado->searchByCi($_POST["ci_emp"]))<1){
+        if($empleado->searchByCi_count($_POST["ci_emp"])<1){
             header("location: ./?c=gestionar_acceso&mf=La cédula ingresada no pertenece a ningún empleado del sistema.");
-            exit();
+            exit(); 
         }
         $acceso->setCI_mon($_POST["ci_emp"]);
         $acceso->setMotivo($_POST["motivo"]);

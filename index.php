@@ -7,10 +7,7 @@
             include("controlador/c_".$_GET["c"].".php");
         }else{
             if (isset($_SESSION['pri_otic'])){
-                switch ($_SESSION['pri_otic']){ // Dependiendo del privilegio o cargo se redirecciona a un determinado menú
-                    case 1: case 2: include("controlador/routes/r_admin_index.php");	break; // DG y SAO (Administrador)
-                    case 0: include("controlador/routes/r_monitor_index.php");	break; // DIS (Monitoreo)
-                }
+                include("controlador/routes/r_admin_index.php");
             }else {
                 include("controlador/routes/r_login.php");
             }

@@ -6,9 +6,11 @@
         }
         return round($val);
     }
+    $escala = 2;
+    $min = 20;
 ?>
 
-<div class="px-5 pt-4">
+<div class="px-5 pt-4 container-estadisticas">
     <form action="?c=gestionar_estadisticas" method="POST" >
     <div class="form-row">
             <div class="form-group col-md-2">
@@ -47,8 +49,8 @@
     </form>
     <div class="row">
         <div class="cuadro-graficos row align-items-end col-12">
-            <div class="barra-medir row col-2">
-                <div class="barra-num col-6 row align-items-end">
+            <div class="barra-medir row col-xl-2 col-4">
+                <div class="barra-num col-11 row align-items-end" style="overflow-y: hidden;">
                     <div class="content-medida col-12">
                         <?php for ($i=10; $i >= 1; $i--){ ?>
                             <div class="item-medida row justify-content-end">
@@ -59,32 +61,32 @@
                         <?php }?>
                     </div>
                 </div>
-                <div class="barra-line col-6" style="height: 500px;">
-                    <div class="line" style="height: 500px;"></div>
+                <div class="barra-line col-1" style="height: <?=$escala*100?>px;">
+                    <div class="line" style="height: <?=$escala*100?>px;"></div>
                 </div>
             </div>
             <div class="col-2 mr-auto">
-                <p class="titulo-barra text-center">En proceso</p>
-                <div class="barra-proceso row align-items-center justify-content-center" style="height: <?=redondear($proceso*100/$total)*5>24?redondear($proceso*100/$total)*5:25?>px;">
-                    <p class="text-barra">Cantidad: <?=$proceso?> / <?=redondear($proceso*100/$total)?>%</p>
+                <div class="row"><p class="titulo-barra mx-auto my-auto">Proceso</p></div>
+                <div class="barra-proceso row align-items-center justify-content-center pt-1" style="height: <?=redondear($proceso*100/$total)*$escala>$min?redondear($proceso*100/$total)*$escala:$min?>px;">
+                    <p class="text-barra text-center"><?=$proceso?> / <?=redondear($proceso*100/$total)?>%</p>
                 </div>
             </div>
             <div class="col-2 mr-auto">
-                <p class="titulo-barra text-center">Finalizado</p>
-                <div class="barra-finalizado row align-items-center justify-content-center" style="height: <?=redondear($finalizado*100/$total)*5>24?redondear($finalizado*100/$total)*5:25?>px;">
-                    <p class="text-barra">Cantidad: <?=$finalizado?> / <?=redondear($finalizado*100/$total)?>%</p>
+                <div class="row"><p class="titulo-barra mx-auto my-auto">Finalizado</p></div>
+                <div class="barra-finalizado row align-items-center justify-content-center pt-1" style="height: <?=redondear($finalizado*100/$total)*$escala>$min?redondear($finalizado*100/$total)*$escala:$min?>px;">
+                    <p class="text-barra text-center"><?=$finalizado?> / <?=redondear($finalizado*100/$total)?>%</p>
                 </div>
             </div>
             <div class="col-2 mr-auto">
-                <p class="titulo-barra text-center">Cancelado</p>
-                <div class="barra-cancelado row align-items-center justify-content-center" style="height: <?=redondear($cancelado*100/$total)*5>24?redondear($cancelado*100/$total)*5:25?>px;">
-                    <p class="text-barra">Cantidad: <?=$cancelado?> / <?=redondear($cancelado*100/$total)?>%</p>
+                <div class="row"><p class="titulo-barra mx-auto my-auto">Cancelado</p></div>
+                <div class="barra-cancelado row align-items-center justify-content-center pt-1" style="height: <?=redondear($cancelado*100/$total)*$escala>$min?redondear($cancelado*100/$total)*$escala:$min?>px;">
+                    <p class="text-barra text-center"><?=$cancelado?> / <?=redondear($cancelado*100/$total)?>%</p>
                 </div>
             </div>
             <div class="col-2 mr-auto">
-                <p class="titulo-barra text-center">Total</p>
-                <div class="barra-total row align-items-center justify-content-center" style="height:500px;">
-                    <p class="text-barra">Cantidad: <?=$total?> / 100%</p>
+                <div class="row"><p class="titulo-barra mx-auto my-auto">Total</p></div>
+                <div class="barra-total row align-items-center justify-content-center pt-1" style="height:<?=$escala*100?>px;">
+                    <p class="text-barra text-center"><?=$total?> / 100%</p>
                 </div>
             </div>
         <div>

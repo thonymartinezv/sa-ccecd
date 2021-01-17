@@ -1,6 +1,14 @@
+:root {
+    --escala:2;
+    --alto-fila:calc(var(--escala)*10px);
+}
+
 .cuadro-graficos{
-    height: 550px;
+    height: calc((var(--alto-fila)*11) + 10px);
     border-bottom: 2px solid rgb(189, 189, 189)!important;
+}
+.container-estadisticas, .form-control, .btn{
+    font-size: xx-small!important;
 }
 
 .barra-proceso{
@@ -21,7 +29,7 @@
 
 .barra-num{
     padding-left: 0!important;
-    height: 500px;
+    height: calc(var(--alto-fila)*10);
 }
 
 .barra-line{
@@ -30,11 +38,12 @@
 }
 
 .item-medida{
-    height: 50px;
+    height: var(--alto-fila);
 }
 
 .barra-medir{
-    height: 500px;
+    height: calc(var(--alto-fila)*10);
+
 }
 
 .content-medida{
@@ -49,4 +58,16 @@
 }
 .titulo-barra{
     color: gray;
+}
+
+@media (max-width: 500px) {
+    .cuadro-graficos{
+        font-size: 4.5px!important;
+    }
+}
+
+@media (max-width: 650px) {
+    .cuadro-graficos{
+        font-size: 7px!important;
+    }
 }
