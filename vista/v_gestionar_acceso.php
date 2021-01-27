@@ -202,14 +202,14 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <form id="crear_acceso" >
+                    <form id="crear_acceso">
                     <div class="modal-body">
                       <ul class="list-group">
                         <li class="list-group-item">
                           <div class="form-group">
                             <label for="exampleInputEmail1"><strong>Cédula de empleado:</strong></label> 
                             <input 
-                              type="text" 
+                              type="number" 
                               class="form-control" 
                               value=""
                               name="ci_emp"

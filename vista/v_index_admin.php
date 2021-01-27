@@ -672,6 +672,21 @@
         if (input.name != "s_nomb" && input.name != "s_apel" && input.value.replace(/\s/g, '') == "") {
           empty = true
         }
+        if ( 
+          (input.name == "p_nomb" || input.name == "s_nomb" || input.name == "p_apel" || input.name == "s_apel") &&
+          validarNombres(input.value)
+        ) {
+          alert('Los nombres y apellidos no pueden contener números, espacios o caracteres especiales')
+          return false
+        }
+        if (input.name == "email_emp" && validarEmail(input.value)) {
+          alert('El correo electrónico no puede contener caracteres especiales')
+          return false
+        }
+        if (input.name == "tlf" && validarTlf(input.value)) {
+          alert('El número teléfonico solo puede contener números, espacios, guión o signo mas')
+          return false
+        }
       }
       if (empty) {
         alert('No puede deja campos vacíos');
@@ -710,6 +725,23 @@
       let form = document.form_crear
       /** Condición que permite conocer si los campos se encuentras vacíos o no **/
       var empty = false
+      if (
+        validarNombres(form.p_nomb.value) ||
+        validarNombres(form.s_nomb.value) ||
+        validarNombres(form.p_apel.value) ||
+        validarNombres(form.s_apel.value)
+      ) {
+        alert('Los nombres y apellidos no pueden contener números, espacios o caracteres especiales')
+        return false
+      }
+      if (validarEmail(form.email_emp.value)) {
+        alert('El correo electrónico no puede contener caracteres especiales')
+        return false
+      }
+      if (validarTlf(form.tlf.value)) {
+        alert('El número teléfonico solo puede contener números, espacios, guión o signo mas')
+        return false
+      }
       for (let input of form.elements) {
         if (input.name != "s_nomb" && input.name != "s_apel" && input.value.replace(/\s/g, '') == "") {
           empty = true
@@ -732,6 +764,22 @@
         }
       }
     }
+
+    function validarNombres(text) {
+      var texto = /[0123456789 `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+      return texto.test(text)
+    }
+
+    function validarEmail(text) {
+      var texto = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+      return texto.test(text)
+    }
+
+    function validarTlf(text) {
+      var texto = /[abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ`!@#$%^&*()_\=\[\]{};':"\\|,.<>\/?~]/
+      return texto.test(text)
+    }
+    
 
     function deshabilitar(email_usu) {
       window.location.href = "./?c=deshabilitar&email_usu=" + email_usu

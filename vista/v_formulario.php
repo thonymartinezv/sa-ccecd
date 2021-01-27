@@ -4,11 +4,11 @@
             <div class="form-group col-md-2">
                 <label for="inputState">Administrador:</label>
                 <input name="administrador" value="<?=isset($_POST["administrador"])?$_POST["administrador"]:""?>"
-                    type="text" class="form-control" />
+                    type="number" class="form-control" />
             </div>
             <div class="form-group col-md-2">
                 <label for="inputState">Empleado:</label>
-                <input name="empleado" value="<?=isset($_POST["empleado"])?$_POST["empleado"]:""?>" type="text"
+                <input name="empleado" value="<?=isset($_POST["empleado"])?$_POST["empleado"]:""?>" type="number"
                     class="form-control" />
             </div>
             <div class="form-group col-md-4">
