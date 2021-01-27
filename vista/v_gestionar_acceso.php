@@ -72,14 +72,14 @@
             <?php if(isset($_GET["ms"])){ ?>
               <div class="alert alert-success alert-dismissible fade show sticky-top mt-2 col-7 mx-auto" role="alert">
                 <strong>Mensaje:</strong> <?=$_GET["ms"]?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:medium;">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
             <?php } else if(isset($_GET["mf"])){?>
               <div class="alert alert-danger alert-dismissible fade show sticky-top mt-2 col-7 mx-auto" role="alert">
                 <strong>Mensaje:</strong> <?=$_GET["mf"]?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:medium;">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
