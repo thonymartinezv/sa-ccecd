@@ -1,3 +1,6 @@
+<?php
+    $monitor = $_SESSION['pri_otic']  < 1;
+?>
 <!-- Sidebar -->
 <div class="bg-dark border-right" id="sidebar-wrapper">
     <div class="sidebar-heading">
@@ -28,7 +31,7 @@
                 <p class="text-muted" style="color:#bbbbbb!important;">Gestionar Empleado</p>
             </div>
         </a>
-        <a href="?c=gestionar_acceso"
+        <<?=$monitor?"button disabled":"a"?> href="?c=gestionar_acceso"
             class="list-group-item list-group-item-action bg-dark <?=$activo=='acceso'?'activo':''?>"
             style="padding-bottom: 0!important;">
             <div class="row ml-2">
@@ -39,7 +42,7 @@
                 </div>
                 <p class="text-muted" style="color:#bbbbbb!important;">Gestionar Acceso</p>
             </div>
-        </a>
+        </<?=$monitor?"button":"a"?>>
         <a href="?c=gestionar_estadisticas"
             class="list-group-item list-group-item-action bg-dark <?=$activo=='estadistica'?'activo':''?>"
             style="padding-bottom: 0!important;">

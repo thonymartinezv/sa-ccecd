@@ -89,7 +89,7 @@ class Usuario extends ConexionBD
 
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email_usu', $this->email_usu);
-			$stmt->bindParam(':clave_usu', $this->clave_usu);
+			$stmt->bindParam(':clave_usu', md5($this->clave_usu));
 			$stmt->bindParam(':estado_usu', $est);
 			
 			/**
@@ -107,6 +107,29 @@ class Usuario extends ConexionBD
 					$this->setEstado_usu($exito[0]["estado_usu"]);
 					$exito = true;
 					}
+			} else {
+				$exito = false;
+			}
+			return $exito;		
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage(); // Mostramos un mensaje genérico de error
+			exit();
+		}
+	}
+
+	public function existEmail($email)
+	{
+		try
+		{
+			$stmt = $this->cbd->prepare("SELECT * from usuario WHERE email_usu = :email_usu");
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':email_usu', $email);
+			/**
+			 * Se verifica si la consuta tiene éxito
+			 */
+			if ($stmt->execute()) { 
+				$exito = $stmt->fetchAll();
 			} else {
 				$exito = false;
 			}

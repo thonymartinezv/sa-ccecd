@@ -3,7 +3,11 @@
       <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Sistema de control de acceso al CCECD</title>
+        <link rel="icon" href="img/bandera.png">
+        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        
         <script type="text/javascript">
                 function Iniciar(valor) 
                 {
@@ -113,7 +117,7 @@
                         <input type="password" class="form-control" placeholder="Contraseña" name="clv_otic">
                     </div>
                     <div class="form-group">
-                        <a type="button" class="btn btn-link btn-sm">¿Olvidó su contraseña?</a>
+                        <a type="button" class="btn btn-link btn-sm">Si olvidó su contraseña debe contactar con soporte de OTIC</a>
                     </div>
                     <button type="button" onClick="Iniciar(this.value)" value="Iniciar sesión" class="btn btn-primary">Entrar</button>
                 </form>

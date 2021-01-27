@@ -1,5 +1,5 @@
 <?php
-    if (!isset($_SESSION['email_otic']) || ($_SESSION['pri_otic'] == 0)) {
+    if (!isset($_SESSION['email_otic'])) {
         header("Location: ./");
         die();
     }
@@ -44,8 +44,12 @@
             $pagina_siguiente = 0;
         }
     }
-
-
+    if ($_SESSION["pri_otic"] < 1) {
+        $admin = false;
+    }else{
+        $admin = true;
+    }
+    
     include("vista/v_index_admin.php");
 
 ?>

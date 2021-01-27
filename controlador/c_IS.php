@@ -11,7 +11,7 @@ if ($user->iniciar_sesion()) { // Se verifica que el usuario exista en la BD
 	$_SESSION['est_otic'] = $user->getEstado_usu();
 	header("Location:./");//se redirecciona al inicio
 } else { //Se redirecciona al inicio de sesión
-	header("Location:/?error");
+	header("Location:./?error");
 	die();
 }
 ?> 

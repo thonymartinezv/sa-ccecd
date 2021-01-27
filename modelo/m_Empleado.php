@@ -11,6 +11,8 @@ class Empleado extends ConexionBD
 	private $p_apel; // string
 	private $s_apel; // string
 	private $fcha_ing; // date
+	private $tipo_sangre; // tipo de sangre
+	private $tlf; // teléfono
 	private $cbd; // conexion de la BD
 
 	// Datos necesarios para la creación de usuario
@@ -152,6 +154,17 @@ class Empleado extends ConexionBD
 		$this->est = $est;
 	}
 
+	public function setTipo($tipo_sangre) 	// tipo de sangre
+	{
+		$this->tipo_sangre = $tipo_sangre;
+	}
+
+	public function setTlf($tlf) 	// tipo de sangre
+	{
+		$this->tlf = $tlf;
+	}
+
+
 	public function getEst()
 	{
 		return $this->est;
@@ -173,7 +186,7 @@ class Empleado extends ConexionBD
 		try
 		{
 			$stmt = $this->cbd->prepare("INSERT INTO empleado (email_emp, ci_emp, p_nomb, s_nomb, p_apel, s_apel, fcha_ing, tipo_sangre,tlf)
-				VALUES (:Email_emp, :CI_emp, :P_nomb, :S_nomb, :P_apel, :S_apel, now()::timestamp(0) , '+A', 12345)");
+				VALUES (:Email_emp, :CI_emp, :P_nomb, :S_nomb, :P_apel, :S_apel, now()::timestamp(0) , :tipo_sangre, :tlf)");
 			
 			// Asignamos valores a los parámetros con $stmt->bindParam 
 			$stmt->bindParam(':Email_emp', $this->email_emp);
@@ -182,6 +195,8 @@ class Empleado extends ConexionBD
 			$stmt->bindParam(':S_nomb', $this->s_nomb);
 			$stmt->bindParam(':P_apel', $this->p_apel);
 			$stmt->bindParam(':S_apel', $this->s_apel);
+			$stmt->bindParam(':tipo_sangre', $this->tipo_sangre);
+			$stmt->bindParam(':tlf', $this->tlf);
 			if ($debug) {
 				return $stmt;
 			}
@@ -191,7 +206,7 @@ class Empleado extends ConexionBD
 				$stmt = $this->cbd->prepare("INSERT INTO usuario (email_usu, clave_usu, pri_usu, estado_usu) 
 				VALUES (:Email_usu, :Clave_usu, :Pri_usu, 1)");
 				$stmt->bindParam(':Email_usu', $this->email_emp); // Se asigna el mismo 'email' para TABLA usuario
-				$stmt->bindParam(':Clave_usu', $this->clv); // Asignación de clave
+				$stmt->bindParam(':Clave_usu', md5($this->clv)); // Asignación de clave
 				$stmt->bindParam(':Pri_usu', $this->pri); // Asignación de privilegio (es el CARGO de OTIC)
 				$exito = $stmt->execute();
 				return $exito; // Retorna verdadero si se registra el usuario, caso contrario, devuelve falso
@@ -365,6 +380,28 @@ class Empleado extends ConexionBD
 			exit();
 		}
 	}
+	public function existCi($ci)
+	{
+		try
+		{
+			$stmt = $this->cbd->prepare("SELECT * from empleado WHERE ci_emp = :ci_emp");
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':ci_emp', $ci);
+			/**
+			 * Se verifica si la consuta tiene éxito
+			 */
+			if ($stmt->execute()) { 
+				$exito = $stmt->fetchAll();
+			} else {
+				$exito = false;
+			}
+			return $exito;		
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage(); // Mostramos un mensaje genérico de error
+			exit();
+		}
+	}
 
 	/**
 	 * Actualizar empleado
@@ -383,7 +420,7 @@ class Empleado extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare("UPDATE empleado SET email_emp = :email_emp, ci_emp = :ci_emp, p_nomb = :p_nomb, 
-				s_nomb = :s_nomb, p_apel = :p_apel, s_apel = :s_apel WHERE email_emp = :email_usu");
+				s_nomb = :s_nomb, p_apel = :p_apel, s_apel = :s_apel, tipo_sangre = :tipo_sangre, tlf = :tlf  WHERE email_emp = :email_usu");
 			
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email_emp', $this->email_emp);
@@ -393,16 +430,18 @@ class Empleado extends ConexionBD
 			$stmt->bindParam(':p_apel', $this->p_apel);
 			$stmt->bindParam(':s_apel', $this->s_apel);
 			$stmt->bindParam(':email_usu', $this->email);
+			$stmt->bindParam(':tipo_sangre', $this->tipo_sangre);
+			$stmt->bindParam(':tlf', $this->tlf);
 			$exito = $stmt->execute();
 			/**
 			 * Sólo se permite sí es DG. Puede cambiar estado y privilegio de DG anteriores, SAO, DIS
 			 */
-			if ( $this->pri_emp != null && $this->pri_emp == 2) {
+			if ( $this->pri_emp != null && $this->pri_emp > 0) {
 				$stmt = $this->cbd->prepare("UPDATE usuario SET email_usu = :email_emp ,pri_usu = :pri_usu WHERE email_usu = :email_usu");
 				$stmt->setFetchMode(PDO::FETCH_ASSOC);
 				$stmt->bindParam(':pri_usu', $this->pri);
-				$stmt->bindParam(':email_usu', $this->email_emp);
 				$stmt->bindParam(':email_emp', $this->email_emp);
+				$stmt->bindParam(':email_usu', $this->email);
 				$stmt->execute();
 			}
 			if ($_SESSION['email_otic'] == $this->email) {
@@ -414,6 +453,26 @@ class Empleado extends ConexionBD
 		}
 		return $exito;
 	}
+
+	public function actualizar_pass()
+	{
+		try 
+		{
+			if ( $this->pri_emp != null && $this->pri_emp > 0 || $this->email_emp == $_SESSION['email_otic']) {
+				$stmt = $this->cbd->prepare("UPDATE usuario SET clave_usu = :clave_usu WHERE email_usu = :email_usu");
+				$stmt->setFetchMode(PDO::FETCH_ASSOC);
+				$stmt->bindParam(':clave_usu', md5($this->clv));
+				$stmt->bindParam(':email_usu', $this->email_emp);
+				$exito = $stmt->execute();
+			}
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage(); // Mostramos un mensame genérico de error.
+			exit();			
+		}
+		return $exito;
+	}
+
+
 
 	/**
 	 * Eliminar empleado
