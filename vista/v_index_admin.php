@@ -679,12 +679,12 @@
         if (input.name != "s_nomb" && input.name != "s_apel" && input.value.replace(/\s/g, '') == "") {
           empty = true
         }
-        if ((input.name == "p_nomb" || input.name == "s_nomb") && validarNombres(input.value)) {
-          alert('Los nombres no pueden contener números, espacios o caracteres especiales')
+        if ((input.name == "p_nomb" || input.name == "s_nomb") && validarNombres(input.value) && input.value > 20) {
+          alert('Los nombres no pueden contener números, espacios, caracteres especiales o tener una longitud mayor a 20 caracteres')
           return false
         }
-        if ( (input.name == "p_apel" || input.name == "s_apel") && validarApellidos(input.value) ) {
-          alert('Los apellidos no pueden contener números o caracteres especiales')
+        if ( (input.name == "p_apel" || input.name == "s_apel") && validarApellidos(input.value) && input.value > 20) {
+          alert('Los apellidos no pueden contener números, caracteres especiales o tener una longitud mayor a 20 caracteres')
           return false
         }
         if (input.name == "email_emp" && validarEmail(input.value)) {
@@ -735,12 +735,13 @@
       var empty = false
       if (form.ci_emp.value.toString().length > 8) {
         alert('Longitud de cédula no permitida')
+        return false
       }
       if (
-        validarNombres(form.p_nomb.value) || form.p_nomb.value.length <= 20 ||
-        validarNombres(form.s_nomb.value) || form.s_nomb.value.length <= 20 ||
-        validarApellidos(form.p_apel.value) || form.p_apel.value.length <= 20 ||
-        validarApellidos(form.s_apel.value) || form.s_apel.value.length <= 20
+        validarNombres(form.p_nomb.value) || form.p_nomb.value.length > 20 ||
+        validarNombres(form.s_nomb.value) || form.s_nomb.value.length > 20 ||
+        validarApellidos(form.p_apel.value) || form.p_apel.value.length > 20 ||
+        validarApellidos(form.s_apel.value) || form.s_apel.value.length > 20
       ) {
         alert('Los nombres y apellidos no pueden contener números, espacios, caracteres especiales, o tener una longitud mayor a 20 caracteres')
         return false

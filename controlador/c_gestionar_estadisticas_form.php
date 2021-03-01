@@ -4,7 +4,7 @@
         die();
     }else{
         require_once('modelo/m_Acceso.php');
-        require_once("modelo/m_institucion.php"); // Clase Modelo de CRUD institución
+        require_once("modelo/m_Institucion.php"); // Clase Modelo de CRUD institución
         $institucion = new Institucion();
         $inst = $institucion->consultar_inst();
         $acceso = new Acceso();

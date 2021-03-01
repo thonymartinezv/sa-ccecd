@@ -6,7 +6,7 @@
     $pagina = isset($_GET["pag"])?intval($_GET["pag"]):1;
     $cantidad = (isset($_GET["num"])?intval($_GET["num"]):10);
     require_once("modelo/m_Empleado.php"); // Clase Modelo de CRUD Empleado
-    require_once("modelo/m_institucion.php"); // Clase Modelo de CRUD institución
+    require_once("modelo/m_Institucion.php"); // Clase Modelo de CRUD institución
     $institucion = new Institucion();
     $inst = $institucion->consultar_inst();
     $empleado_instancia = new Empleado();

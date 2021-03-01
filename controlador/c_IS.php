@@ -18,7 +18,7 @@ $arrResponse = json_decode($response, true);
 if($arrResponse["success"] == '1' && $arrResponse["action"] == $action && $arrResponse["score"] >= 0.5) {
     // Si entra aqui, es un humano, puedes procesar el formulario
 } else {
-    header("Location:./?error");
+	header("Location:./?error");
 	die();
 }
 
@@ -34,7 +34,7 @@ if ($user->iniciar_sesion()) { // Se verifica que el usuario exista en la BD
 	$_SESSION['email_otic'] = $user->getEmail_usu();
 	$_SESSION['pri_otic'] = $user->getPri_usu();
 	$_SESSION['est_otic'] = $user->getEstado_usu();
-	header("Location:./");//se redirecciona al inicio
+	header("Location: ./");//se redirecciona al inicio
 } else { //Se redirecciona al inicio de sesión
 	header("Location:./?error");
 	die();

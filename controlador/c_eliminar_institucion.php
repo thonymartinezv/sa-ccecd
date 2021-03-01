@@ -8,7 +8,7 @@
             header("Location: ./?md=".$msj);
             die();
         }
-        require_once("modelo/m_institucion.php");
+        require_once("modelo/m_Institucion.php");
         require_once("modelo/m_Empleado.php");
         $inst = new Institucion();
         $empleado = new Empleado();

@@ -9,7 +9,7 @@
 			die();
 		}
         
-		require_once("modelo/m_institucion.php");
+		require_once("modelo/m_Institucion.php");
 		$inst = new Institucion();
 		if ($inst->ver_inst_by_nombre($_POST['nombre'])) {// comprobar si la institución ya fue registrada en el sistema
 			$msj = "La institución ingresada ya fue registrada anteriormente en el sistema";

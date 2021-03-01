@@ -92,7 +92,6 @@ class Usuario extends ConexionBD
 			$stmt->bindParam(':email_usu', $this->email_usu);
 			$stmt->bindParam(':clave_usu', $pass);
 			$stmt->bindParam(':estado_usu', $est);
-			
 			/**
 			 * Se verifica si la consuta tiene éxito
 			 */
@@ -108,6 +107,7 @@ class Usuario extends ConexionBD
 					$exito = true;
 				}
 			} else {
+				
 				$exito = false;
 			}
 			return $exito;		
