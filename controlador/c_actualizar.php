@@ -30,7 +30,7 @@ if (!isset($_SESSION['email_otic'])) {
         $emp->setEmail($_POST['id']);
         $emp->setPri_emp($_SESSION['pri_otic']);
         $emp->setPri($_POST['pri_usu']);
-        $emp->setTipo($_POST['tipo_sangre']);
+        $emp->setInstitution($_POST['institution']);
 		$emp->setTlf($_POST['tlf']);
         if($emp->actualizar_emp()) {
             $msj = "Se ha completado con éxito la actualización del empleado";

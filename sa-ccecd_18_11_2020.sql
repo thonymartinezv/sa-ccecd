@@ -46,7 +46,13 @@ CREATE TABLE public.acceso (
     prioridad integer NOT NULL,
     fcha_inicio timestamp without time zone,
     fcha_final timestamp without time zone,
-    avance character varying NOT NULL
+    avance character varying NOT NULL,
+    reporte character varying NOT NULL
+);
+
+CREATE TABLE public.institution (
+    id integer NOT NULL,
+    nombre character varying NOT NULL
 );
 
 
@@ -73,6 +79,18 @@ ALTER TABLE public.acceso_id_acc_seq OWNER TO postgres;
 ALTER SEQUENCE public.acceso_id_acc_seq OWNED BY public.acceso.id_acc;
 
 
+
+CREATE SEQUENCE public.institution_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER TABLE public.institution_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.institution_id_seq OWNED BY public.institution.id;
+
+
+
 --
 -- Name: empleado; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -85,7 +103,7 @@ CREATE TABLE public.empleado (
     p_apel character varying NOT NULL,
     s_apel character varying,
     fcha_ing date NOT NULL,
-    tipo_sangre character varying(5) NOT NULL,
+    id_institution integer NOT NULL,
     tlf character varying(11) NOT NULL
 );
 
@@ -117,27 +135,31 @@ ALTER TABLE ONLY public.acceso ALTER COLUMN id_acc SET DEFAULT nextval('public.a
 -- Data for Name: acceso; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.acceso (id_acc, ci_mon, ci_adm, motivo, estado_acc, prioridad, fcha_inicio, fcha_final, avance) VALUES
-(35,12345678,26902302,'Inventario',1,0,'2020-11-17 16:03:40','2020-11-30 16:04:35','2020-11-30 16:04:04 lguerr10: asdasd'),
-(36,12345678,26902302,'Corte de FO',1,2,'2020-10-01 00:31:27','2020-11-18 00:32:06','2020-10-01 00:31:27 lguerr10: Fase I en progreso'),
-(37,12312311,26902302,'asd',1,1,'2020-11-18 00:37:39','2020-11-18 03:18:04','2020-11-18 00:37:39 lguerr10: asdas'),
-(38,12345678,26902302,'Implementación FO',2,0,'2020-11-18 00:41:59','2020-12-01 00:42:34','2020-11-18 00:41:59 lguerr10: asdas'),
-(39,12345678,26902302,'asd',2,0,'2020-11-18 01:11:57','2020-11-18 01:12:06','2020-11-18 01:11:57 lguerr10: cancelado');
+INSERT INTO public.acceso (id_acc, ci_mon, ci_adm, motivo, estado_acc, prioridad, fcha_inicio, fcha_final, avance,reporte) VALUES
+(35,12345678,26902302,'Inventario',1,0,'2020-11-17 16:03:40','2020-11-30 16:04:35','2020-11-30 16:04:04 lguerr10: asdasd','Finalizado correctamente'),
+(36,12345678,26902302,'Corte de FO',1,2,'2020-10-01 00:31:27','2020-11-18 00:32:06','2020-10-01 00:31:27 lguerr10: Fase I en progreso','Finalizado correctamente'),
+(37,21071155,24134197,'Prueba de servidores',2,1,'2020-11-18 00:37:39','2020-11-18 03:18:04','Prueba de servidores','No se pudo entrar al cuarto'),
+(38,12345678,26902302,'Pruebas',2,0,'2020-11-18 00:41:59','2020-12-01 00:42:34','Prueba de servidores','Se suspendió el acceso por cambio de turno'),
+(39,12345678,26902302,'Prueba menor',0,0,'2020-11-18 01:11:57','2020-11-18 01:12:06','Prueba de mantenimiento','');
 
 
 --
 -- Data for Name: empleado; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.empleado (email_emp, ci_emp, p_nomb, p_apel, fcha_ing,tipo_sangre, tlf) VALUES
-('jreina','12345678','Jesus','Reina','2020-08-14','+A','02129999999'),
-('cguagn','21071155','Chessary','Guagnoni','2016-08-17','+A','02129999999'),
-('fmonti','22777333','Francisco','Montilla','2020-08-01','+A','02129999999'),
-('parmao','26454382','Peter','Armao','2019-07-03','+A','02129999999'),
-('amarti','24134197','Anthony','Martinez','2020-08-02','+A','02129999999'),
-('arondo','20758909','Adonai','Rondon','2012-10-16','+A','02129999999'),
-('jgarci','27309195','Juan','Garcia','2020-07-01','+A','02129999999'),
-('lguerr','26902302','Leonardo','Guerra','2020-07-31','+A','02129999999');
+INSERT INTO public.institution (id , nombre) VALUES
+(1,'MPPCT');
+
+INSERT INTO public.empleado (email_emp, ci_emp, p_nomb, p_apel, fcha_ing,id_institution, tlf) VALUES
+('jreina@mppct.gob.ve','12345678','Jesus','Reina','2020-08-14',1,'02129999999'),
+('cguagn@mppct.gob.ve','21071155','Chessary','Guagnoni','2016-08-17',1,'02129999999'),
+('fmonti@mppct.gob.ve','22777333','Francisco','Montilla','2020-08-01',1,'02129999999'),
+('parmao@mppct.gob.ve','26454382','Peter','Armao','2019-07-03',1,'02129999999'),
+('amarti@mppct.gob.ve','24134197','Anthony','Martinez','2020-08-02',1,'02129999999'),
+('arondo@mppct.gob.ve','20758909','Adonai','Rondon','2012-10-16',1,'02129999999'),
+('jgarci@mppct.gob.ve','27309195','Juan','Garcia','2020-07-01',1,'02129999999'),
+('lguerr@mppct.gob.ve','26902302','Leonardo','Guerra','2020-07-31',1,'02129999999');
+
 
 
 --
@@ -145,14 +167,14 @@ INSERT INTO public.empleado (email_emp, ci_emp, p_nomb, p_apel, fcha_ing,tipo_sa
 --
 
 INSERT INTO public.usuario(email_usu, clave_usu, pri_usu, estado_usu) VALUES 
-('cguagn' , 'CHch123.' , 2 , 0),
-('fmonti' , 'FMfm123.' , 2 , 1),
-('amarti' , 'AMam123.' , 1 , 1),
-('parmao' , 'PApa123.' , 1 , 1),
-('jreina' , 'JRjr123.' , 1 , 1),
-('arondo' , 'ARar123.' , 0 , 0),
-('jgarci' , 'JGjg123.' , 0 , 1),
-('lguerr' , 'LGlg123.' , 2 , 1);
+('cguagn@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 2 , 0),
+('fmonti@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 2 , 1),
+('amarti@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 1 , 1),
+('parmao@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 1 , 1),
+('jreina@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 1 , 1),
+('arondo@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 0 , 0),
+('jgarci@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 0 , 1),
+('lguerr@mppct.gob.ve' , '81dc9bdb52d04dc20036dbd8313ed055' , 2 , 1);
 
 
 --
@@ -160,6 +182,7 @@ INSERT INTO public.usuario(email_usu, clave_usu, pri_usu, estado_usu) VALUES
 --
 
 SELECT pg_catalog.setval('public.acceso_id_acc_seq', 39, true);
+SELECT pg_catalog.setval('public.institution_id_seq', 1, true);
 
 
 --
@@ -168,6 +191,11 @@ SELECT pg_catalog.setval('public.acceso_id_acc_seq', 39, true);
 
 ALTER TABLE ONLY public.empleado
     ADD CONSTRAINT email_emp_pk PRIMARY KEY (email_emp);
+
+
+
+ALTER TABLE ONLY public.institution
+    ADD CONSTRAINT id_institution_pk PRIMARY KEY (id);
 
 
 --

@@ -16,6 +16,7 @@ class Usuario extends ConexionBD
 	 */
 	public function __construct() {
 		$this->cbd = parent::conexion_bd();
+		$this->cbd->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
 	}
 
 	/**
@@ -86,10 +87,10 @@ class Usuario extends ConexionBD
 		{
 			$stmt = $this->cbd->prepare("SELECT email_usu, pri_usu, estado_usu FROM usuario 
 				WHERE email_usu = :email_usu AND clave_usu = :clave_usu AND estado_usu = :estado_usu");
-
+			$pass = md5($this->clave_usu);
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email_usu', $this->email_usu);
-			$stmt->bindParam(':clave_usu', md5($this->clave_usu));
+			$stmt->bindParam(':clave_usu', $pass);
 			$stmt->bindParam(':estado_usu', $est);
 			
 			/**
@@ -97,7 +98,6 @@ class Usuario extends ConexionBD
 			 */
 			if ($stmt->execute()) { // 
 				$exito = $stmt->fetchAll();
-
 				/**
 				 * Condición que determina si los datos ingresados son correctos
 				 * sí es así, se asignan los atributos de privilegio y estado, para generar la sesión en el sistema CCECD.
@@ -106,7 +106,7 @@ class Usuario extends ConexionBD
 					$this->setPri_usu($exito[0]["pri_usu"]);
 					$this->setEstado_usu($exito[0]["estado_usu"]);
 					$exito = true;
-					}
+				}
 			} else {
 				$exito = false;
 			}

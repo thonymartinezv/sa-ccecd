@@ -25,7 +25,7 @@
                         <td scope="col">C.I Empleado</td>
                         <td scope="col">C.I Administrador</td>
                         <td scope="col">Prioridad</td>
-                        <td scope="col">Estado</td>
+                        <td scope="col">Estatus</td>
                         <td scope="col">Motivo</td>
                         <td scope="col">Fecha</td>
                     </tr>

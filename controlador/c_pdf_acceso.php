@@ -28,6 +28,11 @@
             $html .='<td>cédula del empleado:</td>';
             $html .='<td>'.$accesos["ci_mon"].'</td>';
             $html .="</tr>";
+
+            $html .="<tr>";
+            $html .='<td>Institución del empleado:</td>';
+            $html .='<td>'.$accesos["institution"].'</td>';
+            $html .="</tr>";
             
             $html .="<tr>";
             $html .='<td>Nombre del administrador:</td>';
@@ -45,7 +50,7 @@
             $html .="</tr>";
 
             $html .="<tr>";
-            $html .='<td>Estado de acceso:</td>';
+            $html .='<td>Estatus de acceso:</td>';
             $html .='<td>'.($accesos["estado_acc"]>0?($accesos["estado_acc"]>1?"Cancelado":"Finalizado"):"En proceso").'</td>';
             $html .="</tr>";
 
@@ -67,6 +72,11 @@
             $html .="<tr>";
             $html .='<td>Avance:</td>';
             $html .='<td>'.$accesos["avance"].'</td>';
+            $html .="</tr>";
+
+            $html .="<tr>";
+            $html .='<td>Reporte Final:</td>';
+            $html .='<td>'.$accesos["reporte"].'</td>';
             $html .="</tr>";
 
         $html.= "</tbody></table></div>";

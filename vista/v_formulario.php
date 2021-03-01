@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label for="inputState">Estado</label>
+                <label for="inputState">Estatus</label>
                 <select name="estado" id="inputState" class="form-control">
                     <option value="-1" <?=isset($_POST["estado"])?($_POST["estado"]=="-1"?"selected":""):"selected"?>>
                         Ninguno</option>
@@ -52,6 +52,20 @@
                     </option>
                 </select>
             </div>
+            <div class="form-group col-md-4">
+                <label for="exampleInputEmail1"><strong>Institución:</strong></label>
+                <select name="institution" class="form-control" id="exampleFormControlSelect1">
+                    <option value="">Ninguna</option>
+                    <?php for ($i=0; $i < count($inst); $i++) { ?>
+                        <option 
+                            value="<?=$inst[$i]["id"]?>"
+                            <?=isset($_POST["institution"])?($_POST["institution"]==$inst[$i]["id"]?"selected":""):""?>
+                        >
+                            <?=$inst[$i]["nombre"]?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
         </div>
         <div class="container-fluid">
             <button onclick="enviar()" class="btn btn-primary">Aplicar</button>
@@ -66,7 +80,8 @@
                         <th scope="col">C.I Empleado</th>
                         <th scope="col">C.I Administrador</th>
                         <th scope="col">Prioridad</th>
-                        <th scope="col">Estado</th>
+                        <th scope="col">Estatus</th>
+                        <th scope="col">Institución</th>
                         <th scope="col"><span style="opacity: 0.0;">_____________________</span><br>Fecha</th>
                         <th scope="col">Motivo</th>
                         <th scope="col">Ver</th>
@@ -80,10 +95,10 @@
                         <td><?=$accesos[$i]["ci_mon"]?></td>
                         <td><?=$accesos[$i]["ci_adm"]?></td>
                         <td><?=$accesos[$i]["prioridad"]>0?($accesos[$i]["prioridad"]>1?"Alta":"Moderada"):"Baja"?></td>
-                        <td><?=$accesos[$i]["estado_acc"]>0?($accesos[$i]["estado_acc"]>1?"Cancelado":"Finalizado"):"En proceso"?>
-                    </td>
-                    <td><?=$accesos[$i]["fcha_inicio"]?><br><?=$accesos[$i]["fcha_final"]?></td>
-                    <td><?=$accesos[$i]["motivo"]?></td>
+                        <td><?=$accesos[$i]["estado_acc"]>0?($accesos[$i]["estado_acc"]>1?"Cancelado":"Finalizado"):"En proceso"?></td>
+                        <td><?=$accesos[$i]["institution"]?></td>
+                        <td><?=$accesos[$i]["fcha_inicio"]?><br><?=$accesos[$i]["fcha_final"]?></td>
+                        <td><?=$accesos[$i]["motivo"]?></td>
                     <td>
                         <button 
                         class="btn btn-primary"
@@ -132,15 +147,19 @@
                                                 <?=$accesos[$i]["prioridad"]>0?($accesos[$i]["prioridad"]>1?"Alta":"Moderada"):"Baja"?>
                                             </li>
                                             <li class="list-group-item">
-                                                <strong>Estado de acceso:</strong> 
+                                                <strong>Estatus de acceso:</strong> 
                                                 <?=$accesos[$i]["estado_acc"]>0?($accesos[$i]["estado_acc"]>1?"Cancelado":"Finalizado"):"En proceso"?>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>Institución:</strong> 
+                                                <?=$accesos[$i]["institution"]?>
                                             </li>
                                             <li class="list-group-item">
                                                 <strong>Fecha de ingreso:</strong> 
                                                 <?=$accesos[$i]["fcha_inicio"]?>
                                             </li>
                                             <li class="list-group-item">
-                                                <strong>Fecha de ingreso:</strong> 
+                                                <strong>Fecha de egreso:</strong> 
                                                 <?=$accesos[$i]["fcha_final"]?>
                                             </li>
                                             <li class="list-group-item">

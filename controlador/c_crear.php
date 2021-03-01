@@ -31,7 +31,7 @@
 		$emp->setP_apel($_POST['p_apel']);
 		$emp->setS_apel($_POST['s_apel']);
 		$emp->setClave($_POST['clv_usu']);
-		$emp->setTipo($_POST['tipo_sangre']);
+		$emp->setInstitution($_POST['institution']);
 		$emp->setTlf($_POST['tlf']);
 		$emp->setPri($_POST['pri_usu']);
 		if($emp->crear_emp()) {

@@ -28,7 +28,8 @@ class ConexionBD extends PDO
 			 * En el cual se han de especificar lo siguiente: 
 			 * Tipo de BD (pgsql); Host del servidor; Nombre BD; Puerto BD (opcional)
 			 */
-			 $dsn = "pgsql:host=$this->ip_bd;port=$this->port;dbname=$this->nombre_bd";
+			 //$dsn = "pgsql:host=$this->ip_bd;port=$this->port;dbname=$this->nombre_bd";
+			 $dsn = "mysql:host=$this->ip_bd;dbname=$this->nombre_bd";
 			
 			/**
 			 * Database Handle (DBH)

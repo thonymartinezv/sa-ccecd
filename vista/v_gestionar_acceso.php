@@ -144,7 +144,24 @@
                         </div>
                         <div class="modal-body">
                           <div class="d-flex justify-content-center my-5 py-5">
-                            <p class="h5">¿Seguro que desea finalizar el acceso?</strong></p>
+                            <div>
+                              <p class="h5">¿Seguro que desea finalizar el acceso?</strong></p>
+                              <form id="finalizar_<?=$accesos[$i]["id_acc"]?>">
+                                  <ul class="list-group mt-4">
+                                    <li class="list-group-item">
+                                      <div class="form-group">
+                                        <label for="exampleInputEmail1"><strong>Reporte final:</strong></label> 
+                                        <input 
+                                          type="text" 
+                                          class="form-control" 
+                                          value=""
+                                          name="reporte"
+                                        >
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </form>
+                            </div>
                           </div>
                         </div>
                         <div class="modal-footer">
@@ -166,7 +183,24 @@
                         </div>
                         <div class="modal-body">
                           <div class="d-flex justify-content-center my-5 py-5">
-                            <p class="h5">¿Seguro que desea cancelar el acceso?</strong></p>
+                            <div>
+                              <p class="h5">¿Seguro que desea cancelar el acceso?</strong></p>
+                              <form id="cancelar_<?=$accesos[$i]["id_acc"]?>">
+                                <ul class="list-group mt-4">
+                                  <li class="list-group-item">
+                                    <div class="form-group">
+                                      <label for="exampleInputEmail1"><strong>Reporte final:</strong></label> 
+                                      <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        value=""
+                                        name="reporte"
+                                      >
+                                    </div>
+                                  </li>
+                                </ul>
+                              </form>
+                            </div>
                           </div>
                         </div>
                         <div class="modal-footer">
@@ -295,10 +329,16 @@
       $("#wrapper").toggleClass("toggled");
     });
     function finalizar(id_acceso) {
-      window.location.href="./?c=finalizar_acceso&id="+id_acceso
+      let form = document.getElementById("finalizar_"+id_acceso)
+      form.action="./?c=finalizar_acceso&id="+id_acceso
+      form.method= 'POST';
+      form.submit();
     }
     function cancelar(id_acceso) {
-      window.location.href="./?c=cancelar_acceso&id="+id_acceso
+      let form = document.getElementById("cancelar_"+id_acceso)
+      form.action="./?c=cancelar_acceso&id="+id_acceso
+      form.method= 'POST';
+      form.submit();
     }
     function crear() 
     {
@@ -311,7 +351,7 @@
         }
       }
       if (empty) {
-          alert('No puede deja campos vacíos');
+          alert('No puede dejar campos vacíos');
       /** Si los campos no están vacíos, se envía los datos al controlador para constatar que el usuario existe en la BD **/
       } else {
           form.action="?c=crear_acceso";

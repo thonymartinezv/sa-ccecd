@@ -4,17 +4,15 @@
         die();
     }
     $pagina = isset($_GET["pag"])?intval($_GET["pag"]):1;
-    $cantidad = (isset($_GET["num"])?intval($_GET["num"]):4);
+    $cantidad = (isset($_GET["num"])?intval($_GET["num"]):10);
     require_once("modelo/m_Empleado.php"); // Clase Modelo de CRUD Empleado
+    require_once("modelo/m_institucion.php"); // Clase Modelo de CRUD institución
+    $institucion = new Institucion();
+    $inst = $institucion->consultar_inst();
     $empleado_instancia = new Empleado();
     if (isset($_GET["search"])) {
         if (strlen(str_replace(' ', '',$_GET["search"])) > 0) {
             $search = $_GET["search"];
-            if (!(strpos($search, "@") === false)) {
-                if (count(explode("@", $search))>1 && explode("@", $search)[1] == "mppct.gob.ve" ) {
-                    $search = explode("@", $search)[0];
-                }
-            }
             $empleados = $empleado_instancia->searchByEmail($search,$cantidad,(($pagina-1)*$cantidad));
             $total = $empleado_instancia->searchByEmail_count($search);
             if (count($empleados) < 1) {

@@ -131,7 +131,7 @@
               <?php foreach ($empleados as $empleado){ ?>
               <tr>
                 <td>
-                  <?=$empleado["email_emp"]?>@mppct.gob.ve
+                  <?=$empleado["email_emp"]?>
                 </td>
                 <td>
                   <?=$empleado["ci_emp"]?>
@@ -221,7 +221,7 @@
                       <ul class="list-group">
                         <li class="list-group-item">
                           <strong>Correo electrónico:</strong>
-                          <?=$empleado["email_emp"]?>@mppct.gob.ve
+                          <?=$empleado["email_emp"]?>
                         </li>
                         <li class="list-group-item">
                           <strong>Cédula:</strong>
@@ -244,8 +244,8 @@
                           <?=$empleado["s_apel"]?>
                         </li>
                         <li class="list-group-item">
-                          <strong>Tipo de sangre:</strong>
-                          <?=$empleado["tipo_sangre"]?>
+                          <strong>Institución:</strong>
+                          <?=$empleado["institution"]?>
                         </li>
                         <li class="list-group-item">
                           <strong>Teléfono:</strong>
@@ -304,9 +304,6 @@
                                 <input type="text" class="form-control" value="<?=$empleado["email_emp"]?>"
                                 name="email_emp"
                                 <?=$_SESSION["pri_otic"]<1?"readonly":""?>>
-                                <div class="input-group-append">
-                                  <span class="input-group-text" id="basic-addon2">@mppct.gob.ve</span>
-                                </div>
                               </div>
                             </div>
                           </li>
@@ -344,14 +341,23 @@
                           </li>
                           <li class="list-group-item">
                             <div class="form-group">
-                              <label for="exampleInputEmail1"><strong>Tipo de sangre:</strong></label>
-                              <input type="text" class="form-control" value="<?=$empleado["tipo_sangre"]?>" name="tipo_sangre">
+                              <label for="exampleInputEmail1"><strong>Institución:</strong></label>
+                              <select name="institution" class="form-control" id="exampleFormControlSelect1">
+                                <?php for ($i=0; $i < count($inst); $i++) { ?>
+                                <option 
+                                  value="<?=$inst[$i]["id"]?>"
+                                  <?=$empleado["institution"]==$inst[$i]["nombre"]?"selected=\"selected\"":""?>
+                                >
+                                  <?=$inst[$i]["nombre"]?>
+                                </option>
+                                <?php } ?>
+                              </select>
                             </div>
                           </li>
                           <li class="list-group-item">
                             <div class="form-group">
                               <label for="exampleInputEmail1"><strong>Teléfono:</strong></label>
-                              <input type="text" class="form-control" value="<?=$empleado["tlf"]?>" name="tlf">
+                              <input type="number" class="form-control" value="<?=$empleado["tlf"]?>" name="tlf">
                             </div>
                           </li>
                           <li class="list-group-item">
@@ -431,7 +437,7 @@
                         <p class="h5">¿Seguro que desea
                           <?=$empleado["estado_usu"]>0?"deshabilitar":"habilitar"?> al
                           usuario <strong>
-                            <?=$empleado["email_emp"]?>@mppct.gob.ve?
+                            <?=$empleado["email_emp"]?>?
                           </strong>
                         </p>
                       </div>
@@ -536,9 +542,6 @@
                       <label for="exampleInputEmail1"><strong>Correo electrónico:</strong></label>
                       <div class="input-group">
                         <input type="text" class="form-control" value="" name="email_emp">
-                        <div class="input-group-append">
-                          <span class="input-group-text" id="basic-addon2">@mppct.gob.ve</span>
-                        </div>
                       </div>
                     </div>
                   </li>
@@ -574,14 +577,18 @@
                   </li>
                   <li class="list-group-item">
                     <div class="form-group">
-                      <label for="exampleInputEmail1"><strong>Tipo de sangre:</strong></label>
-                      <input type="text" class="form-control" value="" name="tipo_sangre">
+                      <label for="exampleInputEmail1"><strong>Institución:</strong></label>
+                      <select name="institution" class="form-control" id="exampleFormControlSelect1">
+                        <?php for ($i=0; $i < count($inst); $i++) { ?>
+                        <option value="<?=$inst[$i]["id"]?>"><?=$inst[$i]["nombre"]?></option>
+                        <?php } ?>
+                      </select>
                     </div>
                   </li>
                   <li class="list-group-item">
                     <div class="form-group">
                       <label for="exampleInputEmail1"><strong>Teléfono:</strong></label>
-                      <input type="text" class="form-control" value="" name="tlf">
+                      <input type="number" class="form-control" value="" name="tlf">
                     </div>
                   </li>
                   <li class="list-group-item">
@@ -592,7 +599,7 @@
                   </li>
                   <li class="list-group-item">
                     <div class="form-group">
-                      <label for="exampleInputEmail1"><strong>Repetir ontraseña:</strong></label>
+                      <label for="exampleInputEmail1"><strong>Repetir contraseña:</strong></label>
                       <input type="password" class="form-control" value="" name="clv_usu_r">
                     </div>
                   </li>
@@ -672,24 +679,25 @@
         if (input.name != "s_nomb" && input.name != "s_apel" && input.value.replace(/\s/g, '') == "") {
           empty = true
         }
-        if ( 
-          (input.name == "p_nomb" || input.name == "s_nomb" || input.name == "p_apel" || input.name == "s_apel") &&
-          validarNombres(input.value)
-        ) {
-          alert('Los nombres y apellidos no pueden contener números, espacios o caracteres especiales')
+        if ((input.name == "p_nomb" || input.name == "s_nomb") && validarNombres(input.value)) {
+          alert('Los nombres no pueden contener números, espacios o caracteres especiales')
+          return false
+        }
+        if ( (input.name == "p_apel" || input.name == "s_apel") && validarApellidos(input.value) ) {
+          alert('Los apellidos no pueden contener números o caracteres especiales')
           return false
         }
         if (input.name == "email_emp" && validarEmail(input.value)) {
-          alert('El correo electrónico no puede contener caracteres especiales')
+          alert('El correo electrónico no puede contener caracteres especiales (excepto: @ _ .)')
           return false
         }
-        if (input.name == "tlf" && validarTlf(input.value)) {
-          alert('El número teléfonico solo puede contener números, espacios, guión o signo mas')
+        if (input.name == "tlf" && input.value.toString().length > 11) {
+          alert('Longitud de teléfono no permitida')
           return false
         }
       }
       if (empty) {
-        alert('No puede deja campos vacíos');
+        alert('No puede dejar campos vacíos');
         /** Si los campos no están vacíos, se envía los datos al controlador para constatar que el usuario existe en la BD **/
       } else {
         form.action = "?c=actualizar";
@@ -708,7 +716,7 @@
         }
       }
       if (empty) {
-        alert('No puede deja campos vacíos');
+        alert('No puede dejar campos vacíos');
         /** Si los campos no están vacíos, se envía los datos al controlador para constatar que el usuario existe en la BD **/
       } else {
         if (form.password.value != form.repeat_password.value) {
@@ -725,21 +733,24 @@
       let form = document.form_crear
       /** Condición que permite conocer si los campos se encuentras vacíos o no **/
       var empty = false
+      if (form.ci_emp.value.toString().length > 8) {
+        alert('Longitud de cédula no permitida')
+      }
       if (
-        validarNombres(form.p_nomb.value) ||
-        validarNombres(form.s_nomb.value) ||
-        validarNombres(form.p_apel.value) ||
-        validarNombres(form.s_apel.value)
+        validarNombres(form.p_nomb.value) || form.p_nomb.value.length <= 20 ||
+        validarNombres(form.s_nomb.value) || form.s_nomb.value.length <= 20 ||
+        validarApellidos(form.p_apel.value) || form.p_apel.value.length <= 20 ||
+        validarApellidos(form.s_apel.value) || form.s_apel.value.length <= 20
       ) {
-        alert('Los nombres y apellidos no pueden contener números, espacios o caracteres especiales')
+        alert('Los nombres y apellidos no pueden contener números, espacios, caracteres especiales, o tener una longitud mayor a 20 caracteres')
         return false
       }
       if (validarEmail(form.email_emp.value)) {
-        alert('El correo electrónico no puede contener caracteres especiales')
+        alert('El correo electrónico no puede contener caracteres especiales (excepto: @ _ .)')
         return false
       }
-      if (validarTlf(form.tlf.value)) {
-        alert('El número teléfonico solo puede contener números, espacios, guión o signo mas')
+      if (form.tlf.value.toString().length > 11) {
+        alert('Longitud de teléfono no permitida')
         return false
       }
       for (let input of form.elements) {
@@ -748,19 +759,15 @@
         }
       }
       if (empty) {
-        alert('No puede deja campos vacíos')
+        alert('No puede dejar campos vacíos')
         /** Si los campos no están vacíos, se envía los datos al controlador para constatar que el usuario existe en la BD **/
       } else {
         if (form.clv_usu.value != form.clv_usu_r.value) {
           alert('Las contraseñas no coinciden')
         } else {
-          if (form.ci_emp.value.toString().length > 9) {
-            alert('Longitud de cédula no permitida')
-          }else{
-            form.action = "?c=crear";
-            form.method = 'POST';
-            form.submit();
-          }
+          form.action = "?c=crear";
+          form.method = 'POST';
+          form.submit();
         }
       }
     }
@@ -770,16 +777,15 @@
       return texto.test(text)
     }
 
-    function validarEmail(text) {
-      var texto = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+    function validarApellidos(text) {
+      var texto = /[0123456789`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
       return texto.test(text)
     }
 
-    function validarTlf(text) {
-      var texto = /[abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ`!@#$%^&*()_\=\[\]{};':"\\|,.<>\/?~]/
+    function validarEmail(text) {
+      var texto = /[ `!#$%^&*()+\-=\[\]{};':"\\|,<>\/?~]/
       return texto.test(text)
     }
-    
 
     function deshabilitar(email_usu) {
       window.location.href = "./?c=deshabilitar&email_usu=" + email_usu

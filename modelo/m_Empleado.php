@@ -11,7 +11,7 @@ class Empleado extends ConexionBD
 	private $p_apel; // string
 	private $s_apel; // string
 	private $fcha_ing; // date
-	private $tipo_sangre; // tipo de sangre
+	private $institution; // institución
 	private $tlf; // teléfono
 	private $cbd; // conexion de la BD
 
@@ -30,6 +30,7 @@ class Empleado extends ConexionBD
 	public function __construct() 
 	{
 		$this->cbd = parent::conexion_bd();
+		$this->cbd->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
 	}
 
 	/**
@@ -154,12 +155,12 @@ class Empleado extends ConexionBD
 		$this->est = $est;
 	}
 
-	public function setTipo($tipo_sangre) 	// tipo de sangre
+	public function setInstitution($institution) 	// Institución
 	{
-		$this->tipo_sangre = $tipo_sangre;
+		$this->institution = $institution;
 	}
 
-	public function setTlf($tlf) 	// tipo de sangre
+	public function setTlf($tlf) 	// teléfono
 	{
 		$this->tlf = $tlf;
 	}
@@ -185,17 +186,17 @@ class Empleado extends ConexionBD
 	{
 		try
 		{
-			$stmt = $this->cbd->prepare("INSERT INTO empleado (email_emp, ci_emp, p_nomb, s_nomb, p_apel, s_apel, fcha_ing, tipo_sangre,tlf)
-				VALUES (:Email_emp, :CI_emp, :P_nomb, :S_nomb, :P_apel, :S_apel, now()::timestamp(0) , :tipo_sangre, :tlf)");
-			
-			// Asignamos valores a los parámetros con $stmt->bindParam 
+			$stmt = $this->cbd->prepare("INSERT INTO empleado (email_emp, ci_emp, p_nomb, s_nomb, p_apel, s_apel, fcha_ing, id_institution,tlf)
+				VALUES (:Email_emp, :CI_emp, :P_nomb, :S_nomb, :P_apel, :S_apel, now() , :institution, :tlf)");
+			$institution = intval($this->institution);
+			// Asignamos valores a los parámetros con $stmt->bindParam
 			$stmt->bindParam(':Email_emp', $this->email_emp);
 			$stmt->bindParam(':CI_emp', $this->ci_emp);
 			$stmt->bindParam(':P_nomb', $this->p_nomb);
 			$stmt->bindParam(':S_nomb', $this->s_nomb);
 			$stmt->bindParam(':P_apel', $this->p_apel);
 			$stmt->bindParam(':S_apel', $this->s_apel);
-			$stmt->bindParam(':tipo_sangre', $this->tipo_sangre);
+			$stmt->bindParam(':institution', $institution);
 			$stmt->bindParam(':tlf', $this->tlf);
 			if ($debug) {
 				return $stmt;
@@ -225,10 +226,13 @@ class Empleado extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare(
-				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu 
+				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu ,
+					institution.nombre as institution
 					FROM empleado
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu
+					INNER JOIN institution
+					ON empleado.id_institution = institution.id
 					LIMIT :cantidad OFFSET :primero
 			");
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -254,7 +258,8 @@ class Empleado extends ConexionBD
 			");
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->execute();
-			return $stmt->fetchAll()[0]['count'];
+			$result = $stmt->fetchAll()[0];
+			return $result[array_keys($result)[0]];
 		} catch(PDOException $error) {
 			echo "Error: ejecutando consulta SQL.".$error->getMessage();
 			exit();
@@ -266,10 +271,13 @@ class Empleado extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare(
-				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu 
+				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu ,
+					institution.nombre as institution
 					FROM empleado
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu 
+					INNER JOIN institution
+					ON empleado.id_institution = institution.id
 					where empleado.email_emp = :email
 					LIMIT :cantidad OFFSET :primero
 			");
@@ -299,7 +307,8 @@ class Empleado extends ConexionBD
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email', $search);
 			$stmt->execute();
-			return $stmt->fetchAll()[0]['count'];
+			$result = $stmt->fetchAll()[0];
+			return $result[array_keys($result)[0]];
 		} catch(PDOException $error) {
 			echo "Error: ejecutando consulta SQL.".$error->getMessage();
 			exit();
@@ -316,10 +325,13 @@ class Empleado extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare(
-				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu 
+				"	SELECT empleado.*, usuario.estado_usu , usuario.pri_usu , 
+					institution.nombre as institution
 					FROM empleado
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu 
+					INNER JOIN institution
+					ON empleado.id_institution = institution.id
 					where empleado.ci_emp = :ci
 					LIMIT :cantidad OFFSET :primero
 			");
@@ -349,7 +361,8 @@ class Empleado extends ConexionBD
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':ci', $ci);
 			$stmt->execute();
-			return $stmt->fetchAll()[0]['count'];
+			$result = $stmt->fetchAll()[0];
+			return $result[array_keys($result)[0]];
 		} catch(PDOException $error) {
 			echo "Error: ejecutando consulta SQL.".$error->getMessage();
 			exit();
@@ -403,6 +416,29 @@ class Empleado extends ConexionBD
 		}
 	}
 
+	public function existByinst($inst)
+	{
+		try
+		{
+			$stmt = $this->cbd->prepare("SELECT * from empleado WHERE id_institution = :id_institution");
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->bindParam(':id_institution', $inst);
+			/**
+			 * Se verifica si la consuta tiene éxito
+			 */
+			if ($stmt->execute()) { 
+				$exito = $stmt->fetchAll();
+			} else {
+				$exito = false;
+			}
+			return $exito;		
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage(); // Mostramos un mensaje genérico de error
+			exit();
+		}
+	}
+
 	/**
 	 * Actualizar empleado
 	 * Parámetros: 
@@ -420,8 +456,8 @@ class Empleado extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare("UPDATE empleado SET email_emp = :email_emp, ci_emp = :ci_emp, p_nomb = :p_nomb, 
-				s_nomb = :s_nomb, p_apel = :p_apel, s_apel = :s_apel, tipo_sangre = :tipo_sangre, tlf = :tlf  WHERE email_emp = :email_usu");
-			
+				s_nomb = :s_nomb, p_apel = :p_apel, s_apel = :s_apel, id_institution = :institution, tlf = :tlf  WHERE email_emp = :email_usu");
+			$institution = intval($this->institution);
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email_emp', $this->email_emp);
 			$stmt->bindParam(':ci_emp', $this->ci_emp);
@@ -430,7 +466,7 @@ class Empleado extends ConexionBD
 			$stmt->bindParam(':p_apel', $this->p_apel);
 			$stmt->bindParam(':s_apel', $this->s_apel);
 			$stmt->bindParam(':email_usu', $this->email);
-			$stmt->bindParam(':tipo_sangre', $this->tipo_sangre);
+			$stmt->bindParam(':institution', $institution);
 			$stmt->bindParam(':tlf', $this->tlf);
 			$exito = $stmt->execute();
 			/**

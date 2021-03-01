@@ -7,7 +7,9 @@
         <link rel="icon" href="img/bandera.png">
         
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-        
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LeBgWwaAAAAADozUUuRvwaVyyg3Yf7e3m0VkU2R"></script>
         <script type="text/javascript">
                 function Iniciar(valor) 
                 {
@@ -20,10 +22,21 @@
                         
                         /** Si los campos no están vacíos, se envía los datos al controlador para constatar que el usuario existe en la BD **/
                         } else {
-                            document.form1.action="?c=IS";
-                            document.form1.method= 'POST';
-                            document.form1.submit();
+                            grecaptcha.ready(function() {
+                                grecaptcha.execute('6LeBgWwaAAAAADozUUuRvwaVyyg3Yf7e3m0VkU2R', {action: 'login'}).then(function(token) {
+                                    document.form1.token.value = token
+                                    document.form1.action.value = "login"
+                                    document.form1.action="?c=IS";
+                                    document.form1.method= 'POST';
+                                    document.form1.submit();
+                                });;
+                            });
                         }
+                    }
+                }
+                function enter(e) {
+                    if (e.keyCode == 13) {
+                        Iniciar("Iniciar sesión")
                     }
                 }
         </script>
@@ -103,18 +116,20 @@
                 </div>
                 <div class="col-12 d-flex justify-content-center mt-3">
                     <p class="lead title-form">
-                        Sistema de Acceso al Cuarto de Cableado Estructucado y Centro de Datos
+                        Sistema de Acceso al Cuarto de Cableado Estructurado y Centro de Datos
                     </p>
                 </div>
                 <form id="form1" name="form1" autocomplete="off">
+                    <input type="hidden" name="token">
+                    <input type="hidden" name="action">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Nombre de Usuario</label>
-                        <input type="text" class="form-control" placeholder="Usuario" name="usu_otic">
+                        <input type="text" onkeypress="return enter(event)" class="form-control" placeholder="Usuario" name="usu_otic">
                         <small class="form-text text-muted">No incluir caracteres especiales.</small>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Contraseña</label>
-                        <input type="password" class="form-control" placeholder="Contraseña" name="clv_otic">
+                        <input type="password" onkeypress="return  enter(event)" class="form-control" placeholder="Contraseña" name="clv_otic">
                     </div>
                     <div class="form-group">
                         <a type="button" class="btn btn-link btn-sm">Si olvidó su contraseña debe contactar con soporte de OTIC</a>
@@ -124,7 +139,6 @@
             </div>
         </div>
     </body>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </html>

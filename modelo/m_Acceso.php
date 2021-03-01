@@ -11,6 +11,7 @@ class Acceso extends ConexionBD
 	private	$fh_f; // Fecha y hora final -> date
 	private	$mot; // Motivo de ingreso a las instalaciones del CCECD -> varchar
 	private	$avance; // Detalles y avances del acceso -> varchar
+	private $reporte; // Identificador acceso -> serial
 	private	$est_acc; // Estado del acceso -> int
 	private	$pri_acc; // Prioridad de atención del acceso: Baja, Moderada, Alta -> int
 	private $cbd; // conexion de la BD -> bool
@@ -25,6 +26,10 @@ class Acceso extends ConexionBD
 	//CI Monitoreo del personal técnico del DIS
 	public function setID_acc($valor) { 
 		$this->id_acc = $valor;   
+	} 
+
+	public function setReporte($valor) { 
+		$this->reporte = $valor;   
 	} 
 	public function getID_acc() {
 		return $this->id_acc;
@@ -116,6 +121,8 @@ class Acceso extends ConexionBD
 	public function __construct() 
 	{
 		$this->cbd = parent::conexion_bd();
+		$this->cbd->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
+
 	}
 
 	/**
@@ -153,7 +160,7 @@ class Acceso extends ConexionBD
 		try 
 		{
 			$stmt = $this->cbd->prepare("INSERT INTO acceso (ci_mon, ci_adm, fcha_inicio, motivo, estado_acc, prioridad,avance)
-				VALUES (:cimon, :ciadm, now()::timestamp(0), :mot, :est, :pri,:avance)");
+				VALUES (:cimon, :ciadm, now(), :mot, :est, :pri,:avance)");
 			$stmt->bindParam(":cimon",$this->ci_mon);//*
 			$stmt->bindParam(":pri",$this->pri_acc);//*
 			$stmt->bindParam(":mot",$this->mot);//*
@@ -168,18 +175,6 @@ class Acceso extends ConexionBD
 
 	/**
 	 * Consultar accesos en cualquier estado
-	public function consultar_acc()
-	{
-		try 
-		{
-			$stmt = $this->cbd->prepare("SELECT * FROM acceso ORDER BY id_acc");
-			$stmt->execute();
-			$stmt->setFetchMode(PDO::FETCH_ASSOC);
-			return $stmt->FetchAll();
-		} catch(Exception $e) {
-			print "Error: ". $e->getMessage();
-		}
-	}
 	*/
 
 	public function consultar_acc()
@@ -238,9 +233,12 @@ class Acceso extends ConexionBD
 	{
 		try 
 		{
-			$query = "SELECT a.*,mon.p_nomb mon_nombre,adm.p_nomb adm_nombre FROM acceso a
-					  INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
-					  INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE a.id_acc = :id";
+			$query = "SELECT a.*,mon.p_nomb mon_nombre,adm.p_nomb adm_nombre ,
+						institution.nombre as institution
+						FROM acceso a
+						INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
+						INNER JOIN institution ON institution.id = mon.id_institution
+						INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE a.id_acc = :id";
 
 			$stmt = $this->cbd->prepare($query);
 			$stmt->bindParam(":id",$id);
@@ -252,19 +250,23 @@ class Acceso extends ConexionBD
 		}
 	}
 
-	public function consultar_acc_by_all($desde,$hasta,$estado,$prioridad,$administrador,$empleado,$primero,$cantidad)
+	public function consultar_acc_by_all($desde,$hasta,$estado,$prioridad,$administrador,$empleado,$institution,$primero,$cantidad)
 	{
 		try 
 		{
-			$query = "SELECT a.*,mon.p_nomb mon_nombre,adm.p_nomb adm_nombre FROM acceso a
-					  INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
-					  INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE"
-					  .($desde!=""?" fcha_inicio >= :desde AND":"")
-					  .($hasta!=""?" fcha_inicio <= :hasta AND":"")
-					  .($estado!="-1"?" estado_acc = :estado AND":"")
-					  .($administrador!=""?" a.ci_adm = :administrador AND":"")
-					  .($empleado!=""?" a.ci_mon = :empleado AND":"")
-					  .($prioridad!="-1"?" prioridad = :prioridad":"");
+			$query = "SELECT a.*,mon.p_nomb mon_nombre,adm.p_nomb adm_nombre,
+						institution.id as inst_id, institution.nombre as institution 
+						FROM acceso a
+						INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
+						INNER JOIN institution ON institution.id = mon.id_institution
+						INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE"
+						.($desde!=""?" fcha_inicio >= :desde AND":"")
+						.($hasta!=""?" fcha_inicio <= :hasta AND":"")
+						.($estado!="-1"?" estado_acc = :estado AND":"")
+						.($administrador!=""?" a.ci_adm = :administrador AND":"")
+						.($empleado!=""?" a.ci_mon = :empleado AND":"")
+						.($institution!=""?" institution.id = :institution AND":"")
+						.($prioridad!="-1"?" prioridad = :prioridad":"");
 
 			if (substr($query,-3) == "AND") {
 				$query = substr($query,0,-3);
@@ -279,30 +281,34 @@ class Acceso extends ConexionBD
 			if($estado !="-1"){$stmt->bindParam(":estado",$estado);}
 			if($administrador !=""){$stmt->bindParam(":administrador",$administrador);}
 			if($empleado !=""){$stmt->bindParam(":empleado",$empleado);}
+			if($institution !=""){$stmt->bindParam(":institution",$institution);}
 			if($prioridad !="-1"){$stmt->bindParam(":prioridad",$prioridad);}
 			$stmt->bindParam(":cantidad",$cantidad);
 			$stmt->bindParam(":primero",$primero);
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			//echo $query;exit();
 			return $stmt->FetchAll();
 		} catch(Exception $e) {
 			print "Error: ". $e->getMessage();
 		}
 	}
 
-	public function consultar_acc_by_all_count($desde,$hasta,$estado,$prioridad,$administrador,$empleado)
+	public function consultar_acc_by_all_count($desde,$hasta,$estado,$prioridad,$administrador,$empleado,$institution)
 	{
 		try 
 		{
 			$query = "SELECT count(*) FROM acceso a
-					  INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
-					  INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE"
-					  .($desde!=""?" fcha_inicio >= :desde AND":"")
-					  .($hasta!=""?" fcha_inicio <= :hasta AND":"")
-					  .($estado!="-1"?" estado_acc = :estado AND":"")
-					  .($administrador!=""?" a.ci_adm = :administrador AND":"")
-					  .($empleado!=""?" a.ci_mon = :empleado AND":"")
-					  .($prioridad!="-1"?" prioridad = :prioridad":"");
+						INNER JOIN empleado mon ON mon.ci_emp = a.ci_mon
+						INNER JOIN institution ON institution.id = mon.id_institution
+						INNER JOIN empleado adm ON adm.ci_emp = a.ci_adm WHERE"
+						.($desde!=""?" fcha_inicio >= :desde AND":"")
+						.($hasta!=""?" fcha_inicio <= :hasta AND":"")
+						.($estado!="-1"?" estado_acc = :estado AND":"")
+						.($administrador!=""?" a.ci_adm = :administrador AND":"")
+						.($empleado!=""?" a.ci_mon = :empleado AND":"")
+						.($institution!=""?" institution.id = :institution AND":"")
+						.($prioridad!="-1"?" prioridad = :prioridad":"");
 
 			if (substr($query,-3) == "AND") {
 				$query = substr($query,0,-3);
@@ -316,6 +322,7 @@ class Acceso extends ConexionBD
 			if($estado !="-1"){$stmt->bindParam(":estado",$estado);}
 			if($administrador !=""){$stmt->bindParam(":administrador",$administrador);}
 			if($empleado !=""){$stmt->bindParam(":empleado",$empleado);}
+			if($institution !=""){$stmt->bindParam(":institution",$institution);}
 			if($prioridad !="-1"){$stmt->bindParam(":prioridad",$prioridad);}
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -402,7 +409,8 @@ class Acceso extends ConexionBD
 	{	
 		try 
 		{
-			$stmt = $this->cbd->prepare("UPDATE acceso SET estado_acc = 1 , fcha_final = now()::timestamp(0) WHERE id_acc = :id_acc");
+			$stmt = $this->cbd->prepare("UPDATE acceso SET estado_acc = 1,reporte = :reporte , fcha_final = now() WHERE id_acc = :id_acc");
+			$stmt->bindParam(":reporte",$this->reporte);
 			$stmt->bindParam(":id_acc",$this->id_acc);
 			$stmt->execute();
 			if ($debug) {
@@ -418,8 +426,9 @@ class Acceso extends ConexionBD
 	{	
 		try 
 		{
-			$stmt = $this->cbd->prepare("UPDATE acceso SET estado_acc = 2 , fcha_final = now()::timestamp(0) WHERE id_acc = :id_acc");
+			$stmt = $this->cbd->prepare("UPDATE acceso SET estado_acc = 2, reporte = :reporte , fcha_final = now() WHERE id_acc = :id_acc");
 			$stmt->bindParam(":id_acc",$this->id_acc);
+			$stmt->bindParam(":reporte",$this->reporte);
 			$stmt->execute();
 			return $stmt->execute();
 		} catch(Exception $e) {
@@ -460,16 +469,20 @@ class Acceso extends ConexionBD
 			print "Error: ". $e->getMessage();
 		}
 	}
-	public function est_pro_by_all($desde,$hasta,$prioridad,$administrador,$empleado)
+	public function est_pro_by_all($desde,$hasta,$prioridad,$administrador,$empleado,$institution)
 	{
 		try 
 		{
-			$query = "SELECT count(*) FROM acceso WHERE estado_acc = 0 AND"
-					  .($desde!=""?" fcha_inicio >= :desde AND":"")
-					  .($hasta!=""?" fcha_inicio <= :hasta AND":"")
-					  .($administrador!=""?" ci_adm = :administrador AND":"")
-					  .($empleado!=""?" ci_mon = :empleado AND":"")
-					  .($prioridad!="-1"?" prioridad = :prioridad":"");
+			$query = "SELECT count(*) FROM acceso
+						INNER JOIN empleado mon ON mon.ci_emp = acceso.ci_mon
+						INNER JOIN institution ON institution.id = mon.id_institution		
+						WHERE estado_acc = 0 AND"
+						.($desde!=""?" fcha_inicio >= :desde AND":"")
+						.($hasta!=""?" fcha_inicio <= :hasta AND":"")
+						.($administrador!=""?" ci_adm = :administrador AND":"")
+						.($empleado!=""?" ci_mon = :empleado AND":"")
+						.($institution!=""?" institution.id = :institution AND":"")
+						.($prioridad!="-1"?" prioridad = :prioridad":"");
 
 			if (substr($query,-3) == "AND") {
 				$query = substr($query,0,-3);
@@ -479,6 +492,7 @@ class Acceso extends ConexionBD
 			if($hasta != ""){$hasta.=" 23:59:59";$stmt->bindParam(":hasta",$hasta);}
 			if($administrador !=""){$stmt->bindParam(":administrador",$administrador);}
 			if($empleado !=""){$stmt->bindParam(":empleado",$empleado);}
+			if($institution !=""){$stmt->bindParam(":institution",$institution);}
 			if($prioridad !="-1"){$stmt->bindParam(":prioridad",$prioridad);}
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -504,16 +518,20 @@ class Acceso extends ConexionBD
 		}
 	}
 
-	public function est_fin_by_all($desde,$hasta,$prioridad,$administrador,$empleado)
+	public function est_fin_by_all($desde,$hasta,$prioridad,$administrador,$empleado,$institution)
 	{
 		try 
 		{
-			$query = "SELECT count(*) FROM acceso WHERE estado_acc = 1 AND"
-					  .($desde!=""?" fcha_inicio >= :desde AND":"")
-					  .($hasta!=""?" fcha_inicio <= :hasta AND":"")
-					  .($administrador!=""?" ci_adm = :administrador AND":"")
-					  .($empleado!=""?" ci_mon = :empleado AND":"")
-					  .($prioridad!="-1"?" prioridad = :prioridad":"");
+			$query = "SELECT count(*) FROM acceso
+						INNER JOIN empleado mon ON mon.ci_emp = acceso.ci_mon
+						INNER JOIN institution ON institution.id = mon.id_institution		
+						WHERE estado_acc = 1 AND"
+						.($desde!=""?" fcha_inicio >= :desde AND":"")
+						.($hasta!=""?" fcha_inicio <= :hasta AND":"")
+						.($administrador!=""?" ci_adm = :administrador AND":"")
+						.($empleado!=""?" ci_mon = :empleado AND":"")
+						.($institution!=""?" institution.id = :institution AND":"")
+						.($prioridad!="-1"?" prioridad = :prioridad":"");
 
 			if (substr($query,-3) == "AND") {
 				$query = substr($query,0,-3);
@@ -523,6 +541,7 @@ class Acceso extends ConexionBD
 			if($hasta != ""){$hasta.=" 23:59:59";$stmt->bindParam(":hasta",$hasta);}
 			if($administrador !=""){$stmt->bindParam(":administrador",$administrador);}
 			if($empleado !=""){$stmt->bindParam(":empleado",$empleado);}
+			if($institution !=""){$stmt->bindParam(":institution",$institution);}
 			if($prioridad !="-1"){$stmt->bindParam(":prioridad",$prioridad);}
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -548,16 +567,20 @@ class Acceso extends ConexionBD
 		}
 	}
 
-	public function est_can_by_all($desde,$hasta,$prioridad,$administrador,$empleado)
+	public function est_can_by_all($desde,$hasta,$prioridad,$administrador,$empleado,$institution)
 	{
 		try 
 		{
-			$query = "SELECT count(*) FROM acceso WHERE estado_acc = 2 AND"
-					  .($desde!=""?" fcha_inicio >= :desde AND":"")
-					  .($hasta!=""?" fcha_inicio <= :hasta AND":"")
-					  .($administrador!=""?" ci_adm = :administrador AND":"")
-					  .($empleado!=""?" ci_mon = :empleado AND":"")
-					  .($prioridad!="-1"?" prioridad = :prioridad":"");
+			$query = "SELECT count(*) FROM acceso
+						INNER JOIN empleado mon ON mon.ci_emp = acceso.ci_mon
+						INNER JOIN institution ON institution.id = mon.id_institution		
+						WHERE estado_acc = 2 AND"
+						.($desde!=""?" fcha_inicio >= :desde AND":"")
+						.($hasta!=""?" fcha_inicio <= :hasta AND":"")
+						.($administrador!=""?" ci_adm = :administrador AND":"")
+						.($empleado!=""?" ci_mon = :empleado AND":"")
+						.($institution!=""?" institution.id = :institution AND":"")
+						.($prioridad!="-1"?" prioridad = :prioridad":"");
 
 			if (substr($query,-3) == "AND") {
 				$query = substr($query,0,-3);
@@ -567,6 +590,7 @@ class Acceso extends ConexionBD
 			if($hasta != ""){$hasta.=" 23:59:59";$stmt->bindParam(":hasta",$hasta);}
 			if($administrador !=""){$stmt->bindParam(":administrador",$administrador);}
 			if($empleado !=""){$stmt->bindParam(":empleado",$empleado);}
+			if($institution !=""){$stmt->bindParam(":institution",$institution);}
 			if($prioridad !="-1"){$stmt->bindParam(":prioridad",$prioridad);}
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);

@@ -6,6 +6,7 @@
         require_once('modelo/m_Acceso.php');
         $acceso = new Acceso();
         $acceso->setID_acc($_GET['id']);
+        $acceso->setReporte($_POST['reporte']);
         if($acceso->finalizar_acceso()){
             header("location: ./?c=gestionar_acceso&ms=Se ha finalizado el acceso exitosamente");
         }else{

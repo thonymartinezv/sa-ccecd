@@ -7,6 +7,7 @@
         require_once('modelo/m_Acceso.php');
         $acceso = new Acceso();
         $acceso->setID_acc($_GET['id']);
+        $acceso->setReporte($_POST['reporte']);
         if($acceso->cancelar_acceso()){
             header("location: ./?c=gestionar_acceso&ms=Se ha cancelado el acceso exitosamente");
         }else{
