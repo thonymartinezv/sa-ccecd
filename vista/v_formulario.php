@@ -4,12 +4,12 @@
             <div class="form-group col-md-2">
                 <label for="inputState">Administrador:</label>
                 <input name="administrador" value="<?=isset($_POST["administrador"])?$_POST["administrador"]:""?>"
-                    type="number" class="form-control" />
+                    type="number" class="form-control" onkeyup="validarLongitud(this,8)" />
             </div>
             <div class="form-group col-md-2">
-                <label for="inputState">Empleado:</label>
+                <label for="inputState">Usuario:</label>
                 <input name="empleado" value="<?=isset($_POST["empleado"])?$_POST["empleado"]:""?>" type="number"
-                    class="form-control" />
+                onkeyup="validarLongitud(this,8)" class="form-control" />
             </div>
             <div class="form-group col-md-4">
                 <label for="inputState">Desde:</label>
@@ -75,9 +75,9 @@
             <table class="table table-striped mt-2">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Empleado</th>
+                        <th scope="col">Usuario</th>
                         <th scope="col">Administrador</th>
-                        <th scope="col">C.I Empleado</th>
+                        <th scope="col">C.I Usuario</th>
                         <th scope="col">C.I Administrador</th>
                         <th scope="col">Prioridad</th>
                         <th scope="col">Estatus</th>
@@ -115,7 +115,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Acceso del empleado <?=$accesos[$i]["mon_nombre"]?></h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Acceso del usuario <?=$accesos[$i]["mon_nombre"]?></h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -123,11 +123,11 @@
                                     <div class="modal-body">
                                         <ul class="list-group">
                                             <li class="list-group-item">
-                                                <strong>Nombre del Empleado:</strong> 
-                                                <?=$accesos[$i]["mon_nombre"]?>@mppct.gob.ve
+                                                <strong>Nombre del Usuario:</strong> 
+                                                <?=$accesos[$i]["mon_nombre"]?>
                                             </li>
                                             <li class="list-group-item">
-                                                <strong>Cédula del empleado:</strong> 
+                                                <strong>Cédula del usuario:</strong> 
                                                 <?=$accesos[$i]["ci_mon"]?>
                                             </li>
                                             <li class="list-group-item">
@@ -165,6 +165,10 @@
                                             <li class="list-group-item">
                                                 <strong>Avance:</strong> 
                                                 <?=$accesos[$i]["avance"]?>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>Reporte Final:</strong> 
+                                                <?=$accesos[$i]["reporte"]?>
                                             </li>
                                             
                                         </ul>
@@ -205,6 +209,11 @@
 
     <div>
         <script>
+            function validarLongitud(input,maxlength) {
+                if (input.value.length > maxlength) {
+                    input.value = input.value.substring(0, input.value.length - 1)
+                }
+            }
             function enviar(pag) {
                 if (pag && pag != "0") {
                     document.form_estadisticas.action = "?c=gestionar_estadisticas_form&pag=" + pag + "&num=" + <?=$cantidad?>

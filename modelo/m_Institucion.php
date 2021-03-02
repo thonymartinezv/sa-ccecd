@@ -30,12 +30,15 @@ class Institucion extends ConexionBD
 		parent::desconexion_bd();
 	}
 
-    public function crear_inst()
+    public function crear_inst($debug = false)
 	{
 		try 
 		{
 			$stmt = $this->cbd->prepare("INSERT INTO institution (nombre) VALUES (:nombre)");
 			$stmt->bindParam(":nombre",$this->nombre);
+			if($debug){
+				return $stmt;
+			}
 			return $stmt->execute();
 		} catch (Exception $e) {
 			echo "Error: " . $e->getMessage();
@@ -93,14 +96,17 @@ class Institucion extends ConexionBD
 		}
 	}
 
-    public function ver_inst_by_nombre()
+    public function ver_inst_by_nombre($nombre)
 	{
 		try 
 		{
-			$stmt = $this->cbd->prepare("SELECT * FROM institution WHERE nombre = :nombre");
-			$stmt->execute([":nombre"=>$this->nombre]);
+			$operador = MANEJADOR=="pgsql"?"ILIKE":"LIKE";
+			$stmt = $this->cbd->prepare("SELECT count(*) FROM institution WHERE nombre $operador :nombre");
+			$stmt->bindParam(":nombre",$nombre);
+			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
-			return $stmt->FetchAll();
+			$result = $stmt->fetchAll()[0];
+			return $result[array_keys($result)[0]];
 		} catch(Exception $e) {
 			print "Error: ". $e->getMessage();
 		}

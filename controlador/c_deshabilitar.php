@@ -13,10 +13,10 @@
 		$emp->setEmail($_GET['email_usu']);
 		$emp->setEst(0);
 		if($emp->eliminar_emp()) {
-			$msj = "Se ha deshabilitado con éxito el empleado";
+			$msj = "Se ha deshabilitado con éxito el usuario";
 			header("Location: ./?ms=".$msj);
 		} else{
-			$msj = "Ha ocurrido un error al deshabilitar el empleado";
+			$msj = "Ha ocurrido un error al deshabilitar el usuario";
 			header("Location: ./?md=".$msj);
 		}
 	}

@@ -15,12 +15,12 @@
     <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputState">Administrador:</label>
-                <input name="administrador" value="<?=isset($_POST["administrador"])?$_POST["administrador"]:""?>"
+                <input name="administrador" value="<?=isset($_POST["administrador"])?$_POST["administrador"]:""?>" onkeyup="validarLongitud(this,8)"
                     type="number" class="form-control" />
             </div>
             <div class="form-group col-md-4">
-                <label for="inputState">Empleado:</label>
-                <input name="empleado" value="<?=isset($_POST["empleado"])?$_POST["empleado"]:""?>" type="number"
+                <label for="inputState">Usuario:</label>
+                <input name="empleado" value="<?=isset($_POST["empleado"])?$_POST["empleado"]:""?>" type="number" onkeyup="validarLongitud(this,8)"
                     class="form-control" />
             </div>
             <div class="form-group col-md-4">
@@ -61,15 +61,16 @@
         </div>
         <button type="submit" class="btn btn-primary">Aplicar</button>
     </form>
-    <div class="row">
+    <div class="row" style="">
         <div class="cuadro-graficos row align-items-end col-12">
             <div class="barra-medir row col-xl-2 col-4">
+                <div style="position:absolute;margin-top:-1.125rem;"><p style="font-weight:bold;white-space: nowrap;">Porcentaje de accesos</p></div>
                 <div class="barra-num col-11 row align-items-end" style="overflow-y: hidden;">
                     <div class="content-medida col-12">
                         <?php for ($i=10; $i >= 1; $i--){ ?>
                             <div class="item-medida row justify-content-end">
                                 <div class="div-medida col-9">
-                                    <p class=""><?= $i*10 ?></p>
+                                    <p class=""><?= $i*10 ?>%</p>
                                 </div>
                             </div>
                         <?php }?>
@@ -106,3 +107,14 @@
         <div>
     <div>
 </div>
+</div>
+</div>
+    <div class="mx-auto mt-2"><p style="font-weight:bold;white-space: nowrap;font-size:0.75rem;">Estatus de accesos</p></div>
+</div>
+<script>
+    function validarLongitud(input,maxlength) {
+        if (input.value.length > maxlength) {
+            input.value = input.value.substring(0, input.value.length - 1)
+        }
+    }
+</script>

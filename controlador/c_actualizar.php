@@ -33,10 +33,10 @@ if (!isset($_SESSION['email_otic'])) {
         $emp->setInstitution($_POST['institution']);
 		$emp->setTlf($_POST['tlf']);
         if($emp->actualizar_emp()) {
-            $msj = "Se ha completado con éxito la actualización del empleado";
+            $msj = "Se ha completado con éxito la actualización del usuario";
             header("Location: ./?ms=".$msj);
         } else{
-            $msj = "Ha ocurrido un error al actualizar el empleado";
+            $msj = "Ha ocurrido un error al actualizar el usuario";
             header("Location: ./?md=".$msj);
         }
     }else{
@@ -44,10 +44,10 @@ if (!isset($_SESSION['email_otic'])) {
         $emp->setEmail_emp($_POST['id']);
         $emp->setClave($_POST['password']);
         if($emp->actualizar_pass()) {
-            $msj = "Se ha completado con éxito la actualización de la contraseña del empleado";
+            $msj = "Se ha completado con éxito la actualización de la contraseña del usuario";
             header("Location: ./?ms=".$msj);
         } else{
-            $msj = "Ha ocurrido un error al actualizar la contraseña del empleado";
+            $msj = "Ha ocurrido un error al actualizar la contraseña del usuario";
             header("Location: ./?md=".$msj);
         }
     }

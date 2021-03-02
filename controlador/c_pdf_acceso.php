@@ -20,17 +20,17 @@
                 <tbody>
         ';
             $html .="<tr>";
-            $html .='<td>Nombre del empleado:</td>';
+            $html .='<td>Nombre del usuario:</td>';
             $html .='<td>'.$accesos["mon_nombre"].'</td>';
             $html .="</tr>";
 
             $html .="<tr>";
-            $html .='<td>cédula del empleado:</td>';
+            $html .='<td>cédula del usuario:</td>';
             $html .='<td>'.$accesos["ci_mon"].'</td>';
             $html .="</tr>";
 
             $html .="<tr>";
-            $html .='<td>Institución del empleado:</td>';
+            $html .='<td>Institución del usuario:</td>';
             $html .='<td>'.$accesos["institution"].'</td>';
             $html .="</tr>";
             

@@ -11,7 +11,8 @@
         
 		require_once("modelo/m_Institucion.php");
 		$inst = new Institucion();
-		if ($inst->ver_inst_by_nombre($_POST['nombre'])) {// comprobar si la institución ya fue registrada en el sistema
+		if ($inst->ver_inst_by_nombre($_POST['nombre']) > 0) {// comprobar si la institución ya fue registrada en el sistema
+
 			$msj = "La institución ingresada ya fue registrada anteriormente en el sistema";
 			header("Location: ./?c=gestionar_institucion&md=".$msj);
 			die();
@@ -22,7 +23,7 @@
 			$msj = "Se ha completado con éxito el registro de la institución";
 			header("Location: ./?c=gestionar_institucion&ms=".$msj);
 		} else{
-			//var_dump($emp->crear_emp(true)->errorInfo());exit();
+			//var_dump($inst->crear_inst(true)->errorInfo());exit();
 			$msj = "Ha ocurrido un error al registrar la institución";
 			header("Location: ./?c=gestionar_institucion&md=".$msj);
 		}

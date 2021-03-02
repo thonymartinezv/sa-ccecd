@@ -10,8 +10,8 @@
             $empleado = new Empleado();
             $administrador = $empleado->findByEmail($_SESSION["email_otic"]);
             if($empleado->searchByCi_count($_POST["ci_emp"])<1){
-                header("location: ./?c=gestionar_acceso&mf=La cédula ingresada no pertenece a ningún empleado del sistema.");
-                exit(); 
+                header("location: ./?c=gestionar_acceso&mf=La cédula ingresada no pertenece a ningún usuario del sistema.");
+                die(); 
             }
             $acceso->setCI_mon($_POST["ci_emp"]);
             $acceso->setMotivo($_POST["motivo"]);
@@ -22,6 +22,7 @@
             if($acceso->crear_acc()){
                 header("location: ./?c=gestionar_acceso&ms=Se ha creado el nuevo acceso exitosamente");
             }else{
+    			//var_dump($acceso->crear_acc(true)->errorInfo());exit();
                 header("location: ./?c=gestionar_acceso&mf=No se ha podido crear el nuevo acceso por algún fallo interno. Por favor, consulte con soporte.");
             }
         }else{

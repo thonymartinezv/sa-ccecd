@@ -278,9 +278,10 @@ class Empleado extends ConexionBD
 					ON empleado.email_emp = usuario.email_usu 
 					INNER JOIN institution
 					ON empleado.id_institution = institution.id
-					where empleado.email_emp = :email
+					where empleado.email_emp like :email
 					LIMIT :cantidad OFFSET :primero
 			");
+			$search = "%$search%";
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email', $search);
 			$stmt->bindParam(':cantidad', $cantidad);
@@ -302,8 +303,9 @@ class Empleado extends ConexionBD
 					FROM empleado
 					INNER JOIN usuario
 					ON empleado.email_emp = usuario.email_usu
-					where empleado.email_emp = :email
+					where empleado.email_emp like :email
 			");
+			$search = "%$search%";
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->bindParam(':email', $search);
 			$stmt->execute();

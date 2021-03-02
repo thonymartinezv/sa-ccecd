@@ -35,11 +35,11 @@
 		$emp->setTlf($_POST['tlf']);
 		$emp->setPri($_POST['pri_usu']);
 		if($emp->crear_emp()) {
-			$msj = "Se ha completado con éxito el registro del empleado";
+			$msj = "Se ha completado con éxito el registro del usuario";
 			header("Location: ./?ms=".$msj);
 		} else{
-			var_dump($emp->crear_emp(true)->errorInfo());exit();
-			$msj = "Ha ocurrido un error al registrar el empleado";
+			//var_dump($emp->crear_emp(true)->errorInfo());exit();
+			$msj = "Ha ocurrido un error al registrar el usuario";
 			header("Location: ./?md=".$msj);
 		}
 	}

@@ -90,9 +90,9 @@
           <table class="table table-striped mt-4">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Empleado</th>
+                    <th scope="col">Usuario</th>
                     <th scope="col">Administrador</th>
-                    <th scope="col">C.I Empleado</th>
+                    <th scope="col">C.I Usuario</th>
                     <th scope="col">C.I Administrador</th>
                     <th scope="col">Prioridad</th>
                     <th scope="col">Fecha</th>
@@ -241,12 +241,13 @@
                       <ul class="list-group">
                         <li class="list-group-item">
                           <div class="form-group">
-                            <label for="exampleInputEmail1"><strong>Cédula de empleado:</strong></label> 
+                            <label for="exampleInputEmail1"><strong>Cédula de usuario:</strong></label> 
                             <input 
                               type="number" 
                               class="form-control" 
                               value=""
                               name="ci_emp"
+                              onkeyup="validarLongitud(this,8)"
                             >
                           </div>
                         </li>
@@ -328,6 +329,11 @@
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
     });
+    function validarLongitud(input,maxlength) {
+      if (input.value.length > maxlength) {
+        input.value = input.value.substring(0, input.value.length - 1)
+      }
+    }
     function finalizar(id_acceso) {
       let form = document.getElementById("finalizar_"+id_acceso)
       form.action="./?c=finalizar_acceso&id="+id_acceso

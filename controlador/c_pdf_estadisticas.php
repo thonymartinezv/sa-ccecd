@@ -20,9 +20,9 @@
             <table>
                 <thead>
                     <tr>
-                        <td scope="col">Empleado</td>
+                        <td scope="col">Usuario</td>
                         <td scope="col">Administrador</td>
-                        <td scope="col">C.I Empleado</td>
+                        <td scope="col">C.I Usuario</td>
                         <td scope="col">C.I Administrador</td>
                         <td scope="col">Prioridad</td>
                         <td scope="col">Estatus</td>

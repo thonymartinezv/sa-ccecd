@@ -15,7 +15,7 @@ CREATE TABLE acceso (
     fcha_inicio timestamp,
     fcha_final timestamp,
     avance varchar(255) NOT NULL,
-    reporte varchar(255) NOT NULL
+    reporte varchar(255)
 );
 
 CREATE TABLE institution (

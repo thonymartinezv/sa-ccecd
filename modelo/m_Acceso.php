@@ -155,7 +155,7 @@ class Acceso extends ConexionBD
 	/**
 	 * Crear acceso
 	 */
-	public function crear_acc()
+	public function crear_acc($debug = false)
 	{
 		try 
 		{
@@ -167,6 +167,9 @@ class Acceso extends ConexionBD
 			$stmt->bindParam(":est",$this->est_acc);//*
 			$stmt->bindParam(":ciadm",$this->ci_adm);//*
 			$stmt->bindParam(":avance",$this->avance);//*
+			if ($debug) {
+				return $stmt;
+			}
 			return $stmt->execute();
 		} catch (Exception $e) {
 			echo "Error: " . $e->getMessage();

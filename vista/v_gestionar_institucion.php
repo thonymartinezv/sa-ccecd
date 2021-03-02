@@ -91,7 +91,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Nombre</th>
-                    <th class="text-center" scope="col">Finalizar</th>
+                    <th class="text-center" scope="col">Editar</th>
                     <th class="text-center" scope="col">Borrar</th>
                 </tr>
             </thead>

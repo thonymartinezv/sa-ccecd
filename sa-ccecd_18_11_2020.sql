@@ -47,48 +47,18 @@ CREATE TABLE public.acceso (
     fcha_inicio timestamp without time zone,
     fcha_final timestamp without time zone,
     avance character varying NOT NULL,
-    reporte character varying NOT NULL
+    reporte character varying
 );
+
+
+--
+-- Name: institution; Type: TABLE; Schema: public; Owner: postgres
+--
 
 CREATE TABLE public.institution (
     id integer NOT NULL,
     nombre character varying NOT NULL
 );
-
-
-ALTER TABLE public.acceso OWNER TO postgres;
-
---
--- Name: acceso_id_acc_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.acceso_id_acc_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.acceso_id_acc_seq OWNER TO postgres;
-
---
--- Name: acceso_id_acc_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.acceso_id_acc_seq OWNED BY public.acceso.id_acc;
-
-
-
-CREATE SEQUENCE public.institution_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-ALTER TABLE public.institution_id_seq OWNER TO postgres;
-ALTER SEQUENCE public.institution_id_seq OWNED BY public.institution.id;
-
 
 
 --
@@ -127,8 +97,6 @@ ALTER TABLE public.usuario OWNER TO postgres;
 --
 -- Name: acceso id_acc; Type: DEFAULT; Schema: public; Owner: postgres
 --
-
-ALTER TABLE ONLY public.acceso ALTER COLUMN id_acc SET DEFAULT nextval('public.acceso_id_acc_seq'::regclass);
 
 
 --
@@ -178,11 +146,20 @@ INSERT INTO public.usuario(email_usu, clave_usu, pri_usu, estado_usu) VALUES
 
 
 --
--- Name: acceso_id_acc_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: acceso_id_acc_seq; Type: SEQUENCE SET; Schema: public;
+--
+create sequence public.acceso_id_acc_seq;
+alter table public.acceso alter id_acc set default nextval('public.acceso_id_acc_seq');
+Select setval('public.acceso_id_acc_seq', 39 );
+
+
+--
+-- Name: institution_id_seq; Type: SEQUENCE SET; Schema: public;
 --
 
-SELECT pg_catalog.setval('public.acceso_id_acc_seq', 39, true);
-SELECT pg_catalog.setval('public.institution_id_seq', 1, true);
+create sequence public.institution_id_seq;
+alter table public.institution alter id set default nextval('public.institution_id_seq');
+Select setval('public.institution_id_seq', 1 );
 
 
 --

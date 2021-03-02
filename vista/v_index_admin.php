@@ -58,7 +58,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-4">
             <li class="nav-item active">
-              <a class="nav-link" type="button" data-target="#crearEmpleado" data-toggle="modal">Crear Empleado</a>
+              <a class="nav-link" type="button" data-target="#crearEmpleado" data-toggle="modal">Crear Usuario</a>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
@@ -91,7 +91,7 @@
           <?php }?>
           <div class="row pb-2">
             <div class="col-md-4 mt-2 col-sm-12">
-              <p class="display-4 text-center">Empleados</p>
+              <p class="display-4 text-center">Usuarios</p>
             </div>
             <div class="ml-auto col-md-7 col-sm-12">
               <form name="form_empleado">
@@ -310,7 +310,7 @@
                           <li class="list-group-item">
                             <div class="form-group">
                               <label for="exampleInputEmail1"><strong>Cédula:</strong></label>
-                              <input type="text" class="form-control" value="<?=$empleado["ci_emp"]?>" name="ci_emp"
+                              <input type="number" onkeyup="validarLongitud(this,8)" class="form-control" value="<?=$empleado["ci_emp"]?>" name="ci_emp"
                                 readonly
                               >
                             </div>
@@ -357,7 +357,7 @@
                           <li class="list-group-item">
                             <div class="form-group">
                               <label for="exampleInputEmail1"><strong>Teléfono:</strong></label>
-                              <input type="number" class="form-control" value="<?=$empleado["tlf"]?>" name="tlf">
+                              <input type="number" onkeyup="validarLongitud(this,11)" class="form-control" value="<?=$empleado["tlf"]?>" name="tlf">
                             </div>
                           </li>
                           <li class="list-group-item">
@@ -523,13 +523,13 @@
         </div>
       </div>
 
-      <!-- Modal crear empleado-->
+      <!-- Modal crear usuario-->
       <div class="modal fade" id="crearEmpleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Crear empleado</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Crear Usuario</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -548,7 +548,7 @@
                   <li class="list-group-item">
                     <div class="form-group">
                       <label for="exampleInputEmail1"><strong>Cédula:</strong></label>
-                      <input type="number" class="form-control" value="" name="ci_emp">
+                      <input type="number" onkeyup="validarLongitud(this,8)" class="form-control" value="" name="ci_emp">
                     </div>
                   </li>
                   <li class="list-group-item">
@@ -588,7 +588,7 @@
                   <li class="list-group-item">
                     <div class="form-group">
                       <label for="exampleInputEmail1"><strong>Teléfono:</strong></label>
-                      <input type="number" class="form-control" value="" name="tlf">
+                      <input type="number" onkeyup="validarLongitud(this,11)" class="form-control" value="" name="tlf">
                     </div>
                   </li>
                   <li class="list-group-item">
@@ -671,6 +671,13 @@
       }
       window.open(url, "_self")
     }
+
+    function validarLongitud(input,maxlength) {
+      if (input.value.length > maxlength) {
+        input.value = input.value.substring(0, input.value.length - 1)
+      }
+    }
+
     function editar(id) {
       let form = document.getElementById(id)
       /** Condición que permite conocer si los campos se encuentras vacíos o no **/
@@ -680,7 +687,7 @@
           empty = true
         }
         if ((input.name == "p_nomb" || input.name == "s_nomb") && validarNombres(input.value) && input.value > 20) {
-          alert('Los nombres no pueden contener números, espacios, caracteres especiales o tener una longitud mayor a 20 caracteres')
+          alert('Los nombres no pueden contener números, caracteres especiales o tener una longitud mayor a 20 caracteres')
           return false
         }
         if ( (input.name == "p_apel" || input.name == "s_apel") && validarApellidos(input.value) && input.value > 20) {
@@ -743,7 +750,7 @@
         validarApellidos(form.p_apel.value) || form.p_apel.value.length > 20 ||
         validarApellidos(form.s_apel.value) || form.s_apel.value.length > 20
       ) {
-        alert('Los nombres y apellidos no pueden contener números, espacios, caracteres especiales, o tener una longitud mayor a 20 caracteres')
+        alert('Los nombres y apellidos no pueden contener números, caracteres especiales, o tener una longitud mayor a 20 caracteres')
         return false
       }
       if (validarEmail(form.email_emp.value)) {
@@ -774,7 +781,7 @@
     }
 
     function validarNombres(text) {
-      var texto = /[0123456789 `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+      var texto = /[0123456789`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
       return texto.test(text)
     }
 

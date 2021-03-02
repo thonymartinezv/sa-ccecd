@@ -13,10 +13,10 @@
 		$emp->setEmail($_GET['email_usu']);
 		$emp->setEst(1);
 		if($emp->eliminar_emp()) {
-			$msj = "Se ha habilitado con éxito el empleado";
+			$msj = "Se ha habilitado con éxito el usuario";
 			header("Location: ./?ms=".$msj);
 		} else{
-			$msj = "Ha ocurrido un error al habilitar el empleado";
+			$msj = "Ha ocurrido un error al habilitar el usuario";
 			header("Location: ./?md=".$msj);
 		}
 		echo $msj;
