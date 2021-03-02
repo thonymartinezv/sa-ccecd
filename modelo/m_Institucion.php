@@ -45,16 +45,33 @@ class Institucion extends ConexionBD
 		}
 	}
 
-    public function consultar_inst()
+    public function consultar_inst($cantidad = 1,$primero = 0)
 	{
 		try 
 		{
-			$stmt = $this->cbd->prepare("SELECT * FROM institution");
-			$stmt->execute();
+			$stmt = $this->cbd->prepare("SELECT * FROM institution LIMIT :cantidad OFFSET :primero");
+			$stmt->bindParam(':cantidad', $cantidad);
+			$stmt->bindParam(':primero', $primero);
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
 			return $stmt->FetchAll();
 		} catch(Exception $e) {
 			print "Error: ". $e->getMessage();
+		}
+	}
+
+	public function inst_count()
+	{
+		try 
+		{
+			$stmt = $this->cbd->prepare("SELECT count(*) FROM institution");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			$result = $stmt->fetchAll()[0];
+			return $result[array_keys($result)[0]];
+		} catch(PDOException $error) {
+			echo "Error: ejecutando consulta SQL.".$error->getMessage();
+			exit();
 		}
 	}
 

@@ -500,7 +500,7 @@
             </tbody>
           </table>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center pt-4">
           <nav aria-label="Page navigation example">
             <ul class="pagination">
               <li class="page-item">
@@ -518,6 +518,26 @@
                   <span aria-hidden="true">&raquo;</span>
                 </button>
               </li>
+              <li class="page-item">
+                  <div class="form-group ml-4">
+                    <div style="position:absolute;margin-top:-1.25rem;">
+                      <p style="font-weight:bold;">
+                        N° de Filas
+                      </p>
+                    </div>
+                    <select class="form-control form-control-sm" id="exampleFormControlSelect1" onchange="filas(this.value)">
+                      <?php for ($i=1; $i <= 10; $i++) {  ?>
+                        <option value="<?=$i;?>" <?=$cantidad == $i?"selected":""?>><?=$i;?></option>
+                      <?php } ?>
+                    </select>
+                    <script>
+                      function filas(num) {
+                        var url = "?c=admin_index&num="+num
+                        window.open(url, "_self")
+                      }
+                    </script>
+                  </div>
+                </li>
             </ul>
           </nav>
         </div>
@@ -674,7 +694,7 @@
 
     function validarLongitud(input,maxlength) {
       if (input.value.length > maxlength) {
-        input.value = input.value.substring(0, input.value.length - 1)
+        input.value = input.value.substring(0, maxlength)
       }
     }
 

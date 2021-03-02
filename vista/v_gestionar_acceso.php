@@ -331,7 +331,7 @@
     });
     function validarLongitud(input,maxlength) {
       if (input.value.length > maxlength) {
-        input.value = input.value.substring(0, input.value.length - 1)
+        input.value = input.value.substring(0, maxlength)
       }
     }
     function finalizar(id_acceso) {

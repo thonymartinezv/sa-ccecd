@@ -87,7 +87,7 @@
             <p class="display-4">Instituciones registradas</p>
           </div>
           <div class="container-fluid mt-2 overflow-auto">
-          <table class="table table-striped mt-4">
+          <table class="table table-striped table-hover mt-4 col-md-10 mx-auto">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Nombre</th>
@@ -192,7 +192,48 @@
                 </tr>
               <?php } ?>
             </tbody>
-        </table>
+          </table>
+          </div>
+          <div class="d-flex justify-content-center pt-4">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item">
+                  <button class="page-link" onclick="enviar(<?=$pagina_anterior?>)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </button>
+                </li>
+                <?php for ($i=1; $i <= $paginas; $i++) { ?>
+                <li class="page-item <?=$pagina==$i?" active":""?>"><button class="page-link" onclick="enviar(<?=$i?>)">
+                    <?=$i?>
+                  </button></li>
+                <?php } ?>
+                <li class="page-item">
+                  <button class="page-link" onclick="enviar(<?=$pagina_siguiente?>)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </button>
+                </li>
+                <li class="page-item">
+                  <div class="form-group ml-4">
+                    <div style="position:absolute;margin-top:-1.25rem;">
+                      <p style="font-weight:bold;">
+                        N° de Filas
+                      </p>
+                    </div>
+                    <select class="form-control form-control-sm" id="exampleFormControlSelect1" onchange="filas(this.value)">
+                      <?php for ($i=1; $i <= 10; $i++) {  ?>
+                        <option value="<?=$i;?>" <?=$cantidad == $i?"selected":""?>><?=$i;?></option>
+                      <?php } ?>
+                    </select>
+                    <script>
+                      function filas(num) {
+                        var url = "?c=gestionar_institucion&num="+num
+                        window.open(url, "_self")
+                      }
+                    </script>
+                  </div>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
     </div>
@@ -245,6 +286,16 @@
 
   <!-- Menu Toggle Script -->
   <script>
+
+    function enviar(pag) {
+      if (pag && pag != "0") {
+        var url = "?c=gestionar_institucion&pag=" + pag + "&num=" + <?= $cantidad ?>
+      } else {
+        var url = "?c=gestionar_institucion&num="+ <?= $cantidad ?>
+      }
+      window.open(url, "_self")
+    }
+
     $("#menu-toggle").click(function(e) {
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
